@@ -1,0 +1,99 @@
+Initialized a `WebGL1Context` in 113ms
+  MAX_COMBINED_TEXTURE_IMAGE_UNITS = 80
+  MAX_CUBE_MAP_TEXTURE_SIZE = 16384
+  MAX_FRAGMENT_UNIFORM_VECTORS = 1024
+  MAX_RENDERBUFFER_SIZE = 16384
+  MAX_TEXTURE_IMAGE_UNITS = 16
+  VENDOR = "Apple"
+  VERSION = "4.1 Metal - 88"
+  RENDERER = "Apple M1"
+The client(257) is started at 447037511294333.
+To debug with Chrome Inspector, it's recommend to use in your host computer:
+  adb forward tcp:9229 tcp:9485
+Node.js commandline: node --inspect=0.0.0.0:9485 --experimental-vm-modules --experimental-global-customevent --preserve-symlinks --preserve-symlinks-main -r /Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/scripts/jsar-bootstrap-babylon.js /Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/scripts/jsar-client-entry.js 
+Environment Variables List:
+  NODE_DEBUG: (null)
+  NODE_OPTIONS: (null)
+Command Args: (node) (/Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/scripts/jsar-client-entry.js) (--url) () (--id) (257) 
+   Exec Args: (--inspect=0.0.0.0:9485) (--experimental-vm-modules) (--experimental-global-customevent) (--preserve-symlinks) (--preserve-symlinks-main) (-r) (/Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/scripts/jsar-bootstrap-babylon.js) 
+Initialized a `WebGL1Context` in 0ms
+  MAX_COMBINED_TEXTURE_IMAGE_UNITS = 80
+  MAX_CUBE_MAP_TEXTURE_SIZE = 16384
+  MAX_FRAGMENT_UNIFORM_VECTORS = 1024
+  MAX_RENDERBUFFER_SIZE = 16384
+  MAX_TEXTURE_IMAGE_UNITS = 16
+  VENDOR = "Apple"
+  VERSION = "4.1 Metal - 88"
+  RENDERER = "Apple M1"
+Polyfills have been loaded.
+window() => object object
+=============================
+Starting the JavaScript runtime(5136) => 257 [
+  '/Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/runtime/TransmuteClient',
+  '/Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/scripts/jsar-client-entry.js',
+  '--url',
+  '',
+  '--id',
+  '257'
+]
+Application Environment Summary
+- Debugging: No
+- Client Context ClientContext {
+  id: 257,
+  url: '',
+  applicationCacheDirectory: '/Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache',
+  httpsProxyServer: '',
+  webglVersion: 2,
+  gl: WebGL2RenderingContext { _screenCanvas: ReadOnlyScreenCanvas {} },
+  xrDevice: { enabled: true, active: true, stereoRenderingMode: 'singlepass' }
+}
+[WebGL] supported extensions(43):
+  - ARB_blend_func_extended
+  - ARB_draw_buffers_blend
+  - ARB_draw_indirect
+  - ARB_ES2_compatibility
+  - ARB_explicit_attrib_location
+  - ARB_gpu_shader_fp64
+  - ARB_gpu_shader5
+  - ARB_instanced_arrays
+  - ARB_internalformat_query
+  - ARB_occlusion_query2
+  - ARB_sample_shading
+  - ARB_sampler_objects
+  - ARB_separate_shader_objects
+  - ARB_shader_bit_encoding
+  - ARB_shader_subroutine
+  - ARB_shading_language_include
+  - ARB_tessellation_shader
+  - ARB_texture_buffer_object_rgb32
+  - ARB_texture_cube_map_array
+  - ARB_texture_gather
+  - ARB_texture_query_lod
+  - ARB_texture_rgb10_a2ui
+  - ARB_texture_storage
+  - ARB_texture_swizzle
+  - ARB_timer_query
+  - ARB_transform_feedback2
+  - ARB_transform_feedback3
+  - ARB_vertex_attrib_64bit
+  - ARB_vertex_type_2_10_10_10_rev
+  - ARB_viewport_array
+  - EXT_debug_label
+  - EXT_debug_marker
+  - EXT_framebuffer_multisample_blit_scaled
+  - EXT_texture_compression_s3tc
+  - EXT_texture_filter_anisotropic
+  - EXT_texture_sRGB_decode
+  - APPLE_client_storage
+  - APPLE_container_object_shareable
+  - APPLE_flush_render
+  - APPLE_rgb_422
+  - APPLE_row_bytes
+  - APPLE_texture_range
+  - NV_texture_barrier
+[JSARDOM] version=0.3.1
+Time summary: {
+  bootstrap: 5.261583983898163,
+  initialize: 12.414207994937897,
+  total: 17.67579197883606
+}

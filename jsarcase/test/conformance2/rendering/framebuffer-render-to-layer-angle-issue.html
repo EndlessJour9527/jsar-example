@@ -1,0 +1,225 @@
+<!--
+Copyright (c) 2020 The Khronos Group Inc.
+Use of this source code is governed by an MIT-style license that can be
+found in the LICENSE.txt file.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL2 can render to layers in 3D texture angle issue check</title>
+<link rel="stylesheet" href="../../resources/js-test-style.css"/>
+<script src="../../js/js-test-pre.js"></script>
+<script src="../../js/webgl-test-utils.js"></script>
+<script id="vshader" type="x-shader/x-vertex">#version 300 es
+void main(void) {
+  gl_Position = vec4(0, 0, 0, 1);
+  gl_PointSize = 1.0;
+}
+</script>
+<script id="fshader" type="x-shader/x-fragment">#version 300 es
+precision mediump float;
+out vec4 outColor;
+void main() {
+  outColor = vec4(0, 1, 0, 1);
+}
+</script>
+<script src="../../js/webgl-async-loader.js"></script>
+</head>
+<body>
+<canvas id="example" width="1", height="1"></canvas>
+<div id="description"></div>
+<a href='https://bugs.chromium.org/p/angleproject/issues/detail?id=4417'>ANGLE issue #4417</a>
+<div id="console"></div>
+<script type="module">
+"use strict";
+import * as loader from '../../js/webgl-async-loader.js';
+const { waitForWebGLTestGlobals } = loader;
+
+// 将原始测试代码封装为函数
+function runWebGLTest() {
+  try {
+
+debug("");
+
+description("Test that WebGL2 can render to layers in 3D textures");
+
+var wtu = WebGLTestUtils;
+var gl = wtu.create3DContext("example", undefined, 2);
+
+if (!gl) {
+    testFailed("WebGL context creation failed");
+} else {
+    testPassed("WebGL context creation succeeded");
+    runTest();
+}
+
+function runTest() {
+  const fb = gl.createFramebuffer();
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_3D, tex);
+  gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+  gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texImage3D(gl.TEXTURE_3D, 0, gl.RGBA8, gl.canvas.width, gl.canvas.height, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+  for (let i = 0; i < 2; i++) {
+    gl.framebufferTextureLayer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, tex, 0, i);
+
+    const rb = gl.createRenderbuffer();
+    gl.bindRenderbuffer(gl.RENDERBUFFER, rb);
+    gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, gl.canvas.width, gl.canvas.height);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, rb);
+
+    wtu.framebufferStatusShouldBe(gl, gl.FRAMEBUFFER, gl.FRAMEBUFFER_COMPLETE);
+
+    const program = wtu.setupProgram(gl, ['vshader','fshader'], [], console.log.bind(console));
+    gl.useProgram(program);
+
+    gl.drawArrays(gl.POINTS, 0, 1);
+
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, `No errors`);
+    wtu.checkCanvas(gl, [0, 255, 0, 255], `framebuffer layer ${i} should be green`);
+  }
+
+  // make sure we were not rendering to the canvas.
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+  wtu.checkCanvas(gl, [0, 0, 0, 0], "canvas should be zero");
+}
+
+debug("");
+
+    var successfullyParsed = true;
+    console.log("✅ WebGL test completed successfully!");
+  } catch (error) {
+    console.error("❌ WebGL test failed:", error);
+    if (typeof debug !== 'undefined') {
+      debug("Test failed: " + error.message);
+    }
+  }
+}
+
+// 环境检测函数
+function isJSARRuntime() {
+  const checks = [
+    () => typeof waitForWebGLTestGlobals !== 'undefined',
+    () => typeof process !== 'undefined' && process.versions && process.versions.node,
+    () => typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('JSAR'),
+    () => typeof global !== 'undefined' && global.process,
+    () => typeof window === 'undefined' && typeof global !== 'undefined',
+    () => typeof module !== 'undefined' && module.exports
+  ];
+  
+  const result = checks.some(check => {
+    try {
+      return check();
+    } catch (e) {
+      return false;
+    }
+  });
+  
+  console.log('🔍 JSAR Runtime detection result:', result);
+  return result;
+}
+
+// 简单轮询等待函数
+function waitForGlobalsSimple(globals, callback, maxAttempts = 300) {
+  let attempts = 0;
+  console.log('🔄 Starting simple polling for globals:', globals);
+  
+  function check() {
+    attempts++;
+    const available = [];
+    const missing = [];
+    
+    globals.forEach(name => {
+      try {
+        if (typeof eval(name) !== 'undefined') {
+          available.push(name);
+        } else {
+          missing.push(name);
+        }
+      } catch (e) {
+        missing.push(name);
+      }
+    });
+    
+    if (missing.length === 0) {
+      console.log('✅ All globals available:', globals);
+      callback();
+    } else if (attempts >= maxAttempts) {
+      console.error('❌ Timeout waiting for globals. Available:', available, 'Missing:', missing);
+    } else {
+      if (attempts % 20 === 0 || attempts <= 5) {
+        console.log(`⏳ Waiting for globals... Available: [${available.join(', ')}], Missing: [${missing.join(', ')}] (${attempts}/${maxAttempts})`);
+      }
+      setTimeout(check, 50);
+    }
+  }
+  
+  check();
+}
+
+// 智能初始化
+function initializeTest() {
+  console.log("🔍 Checking environment and dependencies...");
+  
+  const isJSAR = isJSARRuntime();
+  const hasAsyncLoader = typeof waitForWebGLTestGlobals !== 'undefined';
+  const requiredGlobals = ['description', 'debug', 'WebGLTestUtils'];
+  
+  console.log("Environment info:", {
+    isJSARRuntime: isJSAR,
+    hasAsyncLoader: hasAsyncLoader,
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+  });
+  
+  if (isJSAR || hasAsyncLoader) {
+    console.log("🔄 JSAR Runtime environment detected, using async loader...");
+    
+    if (hasAsyncLoader) {
+      waitForWebGLTestGlobals(runWebGLTest, {
+        maxRetries: 300,
+        retryInterval: 50,
+        timeout: 15000,
+        onTimeout: function() {
+          console.error("❌ Timeout: WebGL test dependencies not available after 15s");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Timeout waiting for dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        },
+        onError: function() {
+          console.error("❌ Error: Failed to load WebGL test dependencies");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Failed to load dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        }
+      });
+    } else {
+      console.log("⏳ No async loader found, using simple polling...");
+      waitForGlobalsSimple(requiredGlobals, runWebGLTest);
+    }
+  } else {
+    console.log("🌐 Browser environment detected, running test directly...");
+    setTimeout(runWebGLTest, 500);
+  }
+}
+
+// 确保DOM加载完成后再初始化
+setTimeout(initializeTest, 500);
+
+</script>
+<!-- <script src="../../js/js-test-post.js"></script> -->
+
+</body>
+</html>

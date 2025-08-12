@@ -1,0 +1,5 @@
+Received command buffer response(GL::ContextInit) in 113ms which blocks the main thread.
+Received command buffer response(GL::Context2Init) in 33ms which blocks the main thread.
+Debugger listening on ws://0.0.0.0:9485/525c93e0-b5a7-4667-b10e-4b9a5d4e83f5
+For help, see: https://nodejs.org/en/docs/inspector
+Received command buffer response(GL::GetExtensions) in 5ms which blocks the main thread.

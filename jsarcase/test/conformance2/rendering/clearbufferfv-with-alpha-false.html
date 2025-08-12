@@ -1,0 +1,214 @@
+<!--
+Copyright (c) 2019 The Khronos Group Inc.
+Use of this source code is governed by an MIT-style license that can be
+found in the LICENSE.txt file.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Test clearBufferfv with alpha:false canvas</title>
+<link rel="stylesheet" href="../../resources/js-test-style.css"/>
+<script src="../../js/js-test-pre.js"></script>
+<script src="../../js/webgl-test-utils.js"></script>
+<script src="../../js/webgl-async-loader.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<canvas id="canvas" width="20" height="20"> </canvas>
+<script type="module">
+"use strict";
+import * as loader from '../../js/webgl-async-loader.js';
+const { waitForWebGLTestGlobals } = loader;
+
+// 将原始测试代码封装为函数
+function runWebGLTest() {
+  try {
+
+description("This tests the operation of clearBufferfv with the back buffer of an alpha:false canvas.");
+
+function verifyOnePixel(readFormat, readType, arrayType, expectedColor) {
+  var buffer = new arrayType(4);
+  gl.readPixels(0, 0, 1, 1, readFormat, readType, buffer);
+  if (buffer[0] == expectedColor[0] &&
+      buffer[1] == expectedColor[1] &&
+      buffer[2] == expectedColor[2] &&
+      buffer[3] == expectedColor[3]) {
+    testPassed("clearBufferfv set the color buffer to the correct value");
+  } else {
+    testFailed("clearBufferfv failed to work. Expected: " + expectedColor + ", got: " + buffer);
+  }
+}
+
+function testClearBuffer(func, format, arrayType, readFormat, readType, readArrayType) {
+  debug("");
+  debug("Testing " + func);
+
+  var srcData = new arrayType([0, 1, 0, 0]);
+  gl[func](gl.COLOR, 0, srcData);
+  wtu.glErrorShouldBe(gl, gl.NO_ERROR, "clearBuffer with no srcOffset should succeed");
+  // Back buffer has no alpha channel
+  verifyOnePixel(readFormat, readType, Uint8Array, [0, 255, 0, 255]);
+}
+
+var wtu = WebGLTestUtils;
+var canvas = document.getElementById("canvas");
+var gl = navigator.gl || wtu.create3DContext(canvas, { alpha:false }, 2);
+if (!gl) {
+  testFailed("context does not exist");
+} else {
+  testPassed("context exists");
+
+  var testCases = [
+    {
+      func: "clearBufferfv", format: gl.RGBA, arrayType: Float32Array,
+      readFormat: gl.RGBA, readType: gl.UNSIGNED_BYTE, readArrayType: Uint8Array,
+    },
+  ];
+
+  for (var tt = 0; tt < testCases.length; ++tt) {
+    var test = testCases[tt];
+    if (test.extension && !gl.getExtension(test.extension))
+      continue;
+    testClearBuffer(test.func, test.format, test.arrayType,
+                    test.readFormat, test.readType, test.readArrayType);
+  }
+}
+
+debug("");
+wtu.glErrorShouldBe(gl, gl.NO_ERROR, "should be no error");
+
+    var successfullyParsed = true;
+    console.log("✅ WebGL test completed successfully!");
+  } catch (error) {
+    console.error("❌ WebGL test failed:", error);
+    if (typeof debug !== 'undefined') {
+      debug("Test failed: " + error.message);
+    }
+  }
+}
+
+// 环境检测函数
+function isJSARRuntime() {
+  const checks = [
+    () => typeof waitForWebGLTestGlobals !== 'undefined',
+    () => typeof process !== 'undefined' && process.versions && process.versions.node,
+    () => typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('JSAR'),
+    () => typeof global !== 'undefined' && global.process,
+    () => typeof window === 'undefined' && typeof global !== 'undefined',
+    () => typeof module !== 'undefined' && module.exports
+  ];
+  
+  const result = checks.some(check => {
+    try {
+      return check();
+    } catch (e) {
+      return false;
+    }
+  });
+  
+  console.log('🔍 JSAR Runtime detection result:', result);
+  return result;
+}
+
+// 简单轮询等待函数
+function waitForGlobalsSimple(globals, callback, maxAttempts = 300) {
+  let attempts = 0;
+  console.log('🔄 Starting simple polling for globals:', globals);
+  
+  function check() {
+    attempts++;
+    const available = [];
+    const missing = [];
+    
+    globals.forEach(name => {
+      try {
+        if (typeof eval(name) !== 'undefined') {
+          available.push(name);
+        } else {
+          missing.push(name);
+        }
+      } catch (e) {
+        missing.push(name);
+      }
+    });
+    
+    if (missing.length === 0) {
+      console.log('✅ All globals available:', globals);
+      callback();
+    } else if (attempts >= maxAttempts) {
+      console.error('❌ Timeout waiting for globals. Available:', available, 'Missing:', missing);
+    } else {
+      if (attempts % 20 === 0 || attempts <= 5) {
+        console.log(`⏳ Waiting for globals... Available: [${available.join(', ')}], Missing: [${missing.join(', ')}] (${attempts}/${maxAttempts})`);
+      }
+      setTimeout(check, 50);
+    }
+  }
+  
+  check();
+}
+
+// 智能初始化
+function initializeTest() {
+  console.log("🔍 Checking environment and dependencies...");
+  
+  const isJSAR = isJSARRuntime();
+  const hasAsyncLoader = typeof waitForWebGLTestGlobals !== 'undefined';
+  const requiredGlobals = ['description', 'debug', 'WebGLTestUtils'];
+  
+  console.log("Environment info:", {
+    isJSARRuntime: isJSAR,
+    hasAsyncLoader: hasAsyncLoader,
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+  });
+  
+  if (isJSAR || hasAsyncLoader) {
+    console.log("🔄 JSAR Runtime environment detected, using async loader...");
+    
+    if (hasAsyncLoader) {
+      waitForWebGLTestGlobals(runWebGLTest, {
+        maxRetries: 300,
+        retryInterval: 50,
+        timeout: 15000,
+        onTimeout: function() {
+          console.error("❌ Timeout: WebGL test dependencies not available after 15s");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Timeout waiting for dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        },
+        onError: function() {
+          console.error("❌ Error: Failed to load WebGL test dependencies");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Failed to load dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        }
+      });
+    } else {
+      console.log("⏳ No async loader found, using simple polling...");
+      waitForGlobalsSimple(requiredGlobals, runWebGLTest);
+    }
+  } else {
+    console.log("🌐 Browser environment detected, running test directly...");
+    setTimeout(runWebGLTest, 500);
+  }
+}
+
+// 确保DOM加载完成后再初始化
+setTimeout(initializeTest, 500);
+
+</script>
+<!-- <script src="../../js/js-test-post.js"></script> -->
+
+</body>
+</html>

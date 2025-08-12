@@ -1,0 +1,97 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Spatial Photo</title>
+  <style>
+    body {
+      background: #1a1a2e;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 0;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1000px;
+    }
+
+    #stereo-image {
+      height: 100vh;
+      /* width: auto; */
+      /* max-width: 800px; */
+      /* max-height: 600px; */
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgb(255, 255, 255);
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+    }
+
+    #stereo-image:hover {
+      transform: rotateX(2deg) rotateY(-1deg) scale(1.05);
+      box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        0 15px 30px rgba(0, 0, 0, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgb(255, 255, 255);
+    }
+  </style>
+</head>
+
+<body>
+  <img id="stereo-image" src="./assets/sbs-example1.jpg" spatial="stereo" />
+
+  <script>
+    const images = [
+      './assets/sbs-example1.jpg',
+      './assets/sbs-example2.png',
+      './assets/sbs-example3.png'
+    ];
+
+    let currentIndex = 0;
+    const imageElement = document.getElementById('stereo-image');
+
+    // 鼠标移动事件，根据位置改变光标样式
+    imageElement.addEventListener('mousemove', function (e) {
+      const rect = imageElement.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const imageWidth = rect.width;
+
+      // 判断鼠标在图片的左半部分还是右半部分
+      if (x < imageWidth / 2) {
+        imageElement.style.cursor = 'w-resize'; // 左箭头
+      } else {
+        imageElement.style.cursor = 'e-resize'; // 右箭头
+      }
+    });
+
+    // 点击事件，根据位置切换图片
+    imageElement.onmousedown = function (e) {
+      const rect = imageElement.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const imageWidth = rect.width;
+
+      if (x < imageWidth / 2) {
+        // 点击左半部分，切换到上一张图片
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+      } else {
+        // 点击右半部分，切换到下一张图片
+        currentIndex = (currentIndex + 1) % images.length;
+      }
+
+      imageElement.src = images[currentIndex];
+    };
+
+    // 鼠标离开时恢复默认光标
+    imageElement.addEventListener('mouseleave', function () {
+      imageElement.style.cursor = 'pointer';
+    });
+  </script>
+</body>
+
+</html>

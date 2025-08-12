@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>环境映射 - ThreeJS XR 测试案例</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            pointer-events: none;
+            text-shadow: 0 0 5px black;
+        }
+        #back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            z-index: 100;
+        }
+        #back-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        #vr-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            z-index: 100;
+        }
+        #vr-button:hover {
+            background-color: #0b7dda;
+        }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            z-index: 100;
+        }
+        .control-group {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        select {
+            padding: 5px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="info">环境映射 - 使用环境贴图创建逼真的反射和折射效果</div>
+    <button id="back-button" onclick="window.location.href='../index.html'">返回</button>
+    <button id="vr-button">进入 VR</button>
+    <div id="controls">
+        <div class="control-group">
+            <label for="environment-select">环境贴图：</label>
+            <select id="environment-select">
+                <option value="venice_sunset">威尼斯日落</option>
+                <option value="royal_esplanade">皇家广场</option>
+                <option value="quarry">采石场</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label for="material-select">材质类型：</label>
+            <select id="material-select">
+                <option value="standard">标准材质</option>
+                <option value="physical">物理材质</option>
+                <option value="reflective">反射材质</option>
+            </select>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { VRButton } from 'three/addons/webxr/VRButton.js';
+        import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js';
+        import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+
+        // 场景初始化
+        const scene = new THREE.Scene();
+
+        // 相机设置
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.6, 3);
+
+        // 渲染器设置
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1;
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.xr.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // VR按钮
+        document.getElementById('vr-button').addEventListener('click', function() {
+            document.body.appendChild(VRButton.createButton(renderer));
+            document.getElementById('vr-button').style.display = 'none';
+        });
+
+        // 控制器
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 1, 0);
+        controls.update();
+
+        // 环境贴图加载器
+        const rgbeLoader = new RGBELoader();
+        rgbeLoader.setDataType(THREE.HalfFloatType);
+
+        // 环境贴图URL
+        const environmentMaps = {
+            venice_sunset: 'https://threejs.org/examples/textures/equirectangular/venice_sunset_1k.hdr',
+            royal_esplanade: 'https://threejs.org/examples/textures/equirectangular/royal_esplanade_1k.hdr',
+            quarry: 'https://threejs.org/examples/textures/equirectangular/quarry_01_1k.hdr'
+        };
+
+        // 当前环境贴图和材质类型
+        let currentEnvironment = 'venice_sunset';
+        let currentMaterialType = 'standard';
+
+        // 对象组
+        const objectGroup = new THREE.Group();
+        scene.add(objectGroup);
+
+        // 加载环境贴图并设置场景背景
+        function loadEnvironment(name) {
+            const url = environmentMaps[name];
+            rgbeLoader.load(url, function(texture) {
+                const pmremGenerator = new THREE.PMREMGenerator(renderer);
+                pmremGenerator.compileEquirectangularShader();
+                
+                const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+                scene.background = envMap;
+                scene.environment = envMap;
+                
+                texture.dispose();
+                pmremGenerator.dispose();
+                
+                updateMaterials();
+            });
+        }
+
+        // 创建展示对象
+        function createObjects() {
+            // 清除现有对象
+            while(objectGroup.children.length > 0) { 
+                objectGroup.remove(objectGroup.children[0]); 
+            }
+
+            // 创建基座
+            const baseGeometry = new THREE.CylinderGeometry(1.5, 1.5, 0.1, 32);
+            const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8, metalness: 0.2 });
+            const base = new THREE.Mesh(baseGeometry, baseMaterial);
+            base.position.y = -0.05;
+            objectGroup.add(base);
+
+            // 创建不同形状的对象
+            const shapes = [];
+
+            // 球体
+            const sphereGeometry = new THREE.SphereGeometry(0.4, 64, 64);
+            const sphere = new THREE.Mesh(sphereGeometry, createMaterial());
+            sphere.position.set(-0.8, 0.4, 0);
+            shapes.push(sphere);
+
+            // 立方体
+            const cubeGeometry = new THREE.BoxGeometry(0.6, 0.6, 0.6);
+            const cube = new THREE.Mesh(cubeGeometry, createMaterial());
+            cube.position.set(0, 0.4, 0);
+            shapes.push(cube);
+
+            // 环面
+            const torusGeometry = new THREE.TorusKnotGeometry(0.3, 0.1, 100, 32);
+            const torus = new THREE.Mesh(torusGeometry, createMaterial());
+            torus.position.set(0.8, 0.4, 0);
+            shapes.push(torus);
+
+            // 添加所有形状到场景
+            shapes.forEach(shape => objectGroup.add(shape));
+
+            return shapes;
+        }
+
+        // 根据当前选择创建材质
+        function createMaterial() {
+            let material;
+
+            switch(currentMaterialType) {
+                case 'standard':
+                    material = new THREE.MeshStandardMaterial({
+                        roughness: 0.1,
+                        metalness: 1.0,
+                        envMapIntensity: 1.0
+                    });
+                    break;
+                case 'physical':
+                    material = new THREE.MeshPhysicalMaterial({
+                        roughness: 0.1,
+                        metalness: 0.0,
+                        transmission: 1.0,
+                        ior: 1.5,
+                        thickness: 0.5,
+                        envMapIntensity: 1.0
+                    });
+                    break;
+                case 'reflective':
+                    material = new THREE.MeshPhysicalMaterial({
+                        roughness: 0.0,
+                        metalness: 1.0,
+                        clearcoat: 1.0,
+                        clearcoatRoughness: 0.1,
+                        envMapIntensity: 1.0
+                    });
+                    break;
+            }
+
+            return material;
+        }
+
+        // 更新所有材质
+        function updateMaterials() {
+            objectGroup.traverse((child) => {
+                if (child.isMesh && child.material) {
+                    // 保存位置
+                    const position = child.position.clone();
+                    
+                    // 替换材质
+                    child.material.dispose();
+                    child.material = createMaterial();
+                    
+                    // 恢复位置
+                    child.position.copy(position);
+                }
+            });
+        }
+
+        // 初始化
+        let shapes = createObjects();
+        loadEnvironment(currentEnvironment);
+
+        // 控制界面事件
+        document.getElementById('environment-select').addEventListener('change', function(e) {
+            currentEnvironment = e.target.value;
+            loadEnvironment(currentEnvironment);
+        });
+
+        document.getElementById('material-select').addEventListener('change', function(e) {
+            currentMaterialType = e.target.value;
+            updateMaterials();
+        });
+
+        // VR控制器设置
+        const controllerModelFactory = new XRControllerModelFactory();
+        
+        // 控制器1
+        const controller1 = renderer.xr.getController(0);
+        scene.add(controller1);
+
+        const controllerGrip1 = renderer.xr.getControllerGrip(0);
+        controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
+        scene.add(controllerGrip1);
+
+        // 控制器2
+        const controller2 = renderer.xr.getController(1);
+        scene.add(controller2);
+
+        const controllerGrip2 = renderer.xr.getControllerGrip(1);
+        controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2));
+        scene.add(controllerGrip2);
+
+        // 动画
+        function animate() {
+            renderer.setAnimationLoop(render);
+        }
+
+        function render() {
+            const time = performance.now() * 0.001;
+
+            // 旋转对象
+            shapes.forEach((shape, index) => {
+                shape.rotation.x = time * (0.2 + index * 0.1);
+                shape.rotation.y = time * (0.3 + index * 0.1);
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // 窗口大小调整
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onWindowResize);
+
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Spatial Photo</title>
+  <style>
+    html,
+    body {
+      overflow: hidden;
+    }
+
+    body {
+      background: #1a1a2e;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      perspective: 1000px;
+      /* position: relative; */
+    }
+
+    .photo-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #stereo-image {
+      height: 100vh;
+      object-fit: cover;
+      border-radius: 0px;
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 10px 20px rgba(0, 0, 0, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgb(255, 255, 255);
+      transition: all 0.3s ease;
+      transform-style: preserve-3d;
+    }
+
+    #stereo-image:hover {
+      transform: rotateX(2deg) rotateY(-1deg) scale(1.05);
+      box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        0 15px 30px rgba(0, 0, 0, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgb(255, 255, 255);
+    }
+
+    .btn-container {
+      position: absolute;
+      top: 50%;
+      display: flex;
+      justify-content: space-between;
+      justify-items: space-between;
+      border: none;
+      box-sizing: border-box;
+      background-color: #c9d4df5f;
+    }
+
+    .nav-button {
+      position: absolute;
+      /* top: 50%; */
+      transform: translateY(-50%);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .prev-button {
+      left: 10px;
+    }
+
+    .next-button {
+      right: 10px;
+    }
+
+    /* .nav-button:hover {
+      transform: translateY(-50%) scale(1.1);
+      background: rgba(255, 255, 255, 0.4);
+    } */
+
+    .nav-button img {
+      width: 32px;
+      height: 32px;
+      filter: brightness(0) invert(1);
+    }
+
+    .prev-button img {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="btn-container">
+    <button class="nav-button prev-button" id="prev-btn">
+      <img src="./assets/right.png" alt="Previous" />
+    </button>
+    <button class="nav-button next-button" id="next-btn">
+      <img src="./assets/right.png" alt="Next" />
+    </button>
+  </div>
+  <!-- <div class="photo-container">
+    <img id="stereo-image" src="./assets/sbs-example1.jpg" spatial="stereo" />
+  </div> -->
+
+  <script>
+    const images = [
+      './assets/sbs-example1.jpg',
+      './assets/sbs-example2.png',
+      './assets/sbs-example3.png'
+    ];
+
+    let currentIndex = 0;
+    const imageElement = document.getElementById('stereo-image');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    // 切换图片函数
+    function switchImage(newIndex) {
+      currentIndex = newIndex;
+      imageElement.src = images[currentIndex];
+    }
+
+    // 上一张图片
+    function prevImage() {
+      const newIndex = (currentIndex - 1 + images.length) % images.length;
+      switchImage(newIndex);
+    }
+
+    // 下一张图片
+    function nextImage() {
+      const newIndex = (currentIndex + 1) % images.length;
+      switchImage(newIndex);
+    }
+
+    // 按钮点击事件（只有在按钮存在时才添加）
+    if (prevBtn) {
+      prevBtn.addEventListener('click', prevImage);
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', nextImage);
+    }
+
+    // // 创建跟随鼠标的指示器元素
+    // const cursorIndicator = document.createElement('div');
+    // cursorIndicator.style.position = 'fixed';
+    // cursorIndicator.style.width = '32px';
+    // cursorIndicator.style.height = '32px';
+    // cursorIndicator.style.pointerEvents = 'none';
+    // cursorIndicator.style.zIndex = '1000';
+    // cursorIndicator.style.display = 'none';
+    // cursorIndicator.style.transform = 'translate(-50%, -50%)';
+    // cursorIndicator.innerHTML = '<img src="./assets/right.png" style="width: 100%; height: 100%; filter: brightness(0) invert(1); transition: transform 0.2s ease;">';
+    // document.body.appendChild(cursorIndicator);
+
+    // // 鼠标移动事件，跟随鼠标位置并根据位置翻转图片
+    // imageElement.addEventListener('mousemove', function (e) {
+    //   const rect = imageElement.getBoundingClientRect();
+    //   const x = e.clientX - rect.left;
+    //   const imageWidth = rect.width;
+
+    //   // 显示指示器并跟随鼠标
+    //   cursorIndicator.style.display = 'block';
+    //   cursorIndicator.style.left = e.clientX + 'px';
+    //   cursorIndicator.style.top = e.clientY + 'px';
+
+    //   const indicatorImg = cursorIndicator.querySelector('img');
+
+    //   // 判断鼠标在图片的左半部分还是右半部分
+    //   if (x < imageWidth / 2) {
+    //     indicatorImg.style.transform = 'rotate(180deg)'; // 左箭头（旋转的right.png）
+    //   } else {
+    //     indicatorImg.style.transform = 'rotate(0deg)'; // 右箭头（right.png）
+    //   }
+    // });
+
+    // 点击事件，根据位置切换图片
+    imageElement.onmousedown = function (e) {
+      const rect = imageElement.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const imageWidth = rect.width;
+
+      if (x < imageWidth / 2) {
+        // 点击左半部分，切换到上一张图片
+        prevImage();
+      } else {
+        // 点击右半部分，切换到下一张图片
+        nextImage();
+      }
+    };
+
+    // 鼠标离开图片时隐藏指示器
+    imageElement.addEventListener('mouseleave', function () {
+      cursorIndicator.style.display = 'none';
+    });
+  </script>
+</body>
+
+</html>

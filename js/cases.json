@@ -1,0 +1,83 @@
+[
+  {
+    "id": "transpanent-scene",
+    "title": "透明度测试场景",
+    "description": "一个基础的ThreeJS XR场景，包含简单的几何体和光照效果",
+    "tags": [
+      "透明度",
+      "几何体"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "/jsarcase/three-transparent.html"
+  },
+  {
+    "id": "spatial-image",
+    "title": "spatial-image",
+    "description": "spatial-image",
+    "tags": [
+      "spatial-Image"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "/jsarcase/spatial-case/spatial_photo/spatial-photo.html"
+  },
+  {
+    "id": "transpanent-scene",
+    "title": "环境贴图场景",
+    "description": "一个基础的ThreeJS XR场景，包含简单的几何体和光照效果",
+    "tags": [
+      "透明度",
+      "几何体"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "/jsarcase/three-cubemap-mipmap.html"
+  },
+  {
+    "id": "3d-image",
+    "title": "环境贴图场景 - prod ",
+    "description": "一个基础的ThreeJS XR场景，包含简单的几何体和光照效果",
+    "tags": [
+      "3D-Image"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "https://rokid-xr.oss-cn-hangzhou.aliyuncs.com/dev/jsar/spatial_photo/spatial-photo.html"
+  },
+  {
+    "id": "按钮事件",
+    "title": "按钮事件",
+    "description": "按钮事件",
+    "tags": [
+      "基础功能"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "/jsarcase/openwindow.html"
+  },
+  {
+    "id": "viewer",
+    "title": "rokid-museum",
+    "description": "按钮事件",
+    "tags": [
+      "目标网站"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "https://rokid-xr.oss-cn-hangzhou.aliyuncs.com/prod/RokidTerminalMuseum/dist/index.html"
+  },
+  {
+    "id": "test-viewer",
+    "title": "rokid-museum",
+    "description": "按钮事件",
+    "tags": [
+      "目标网站"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "http://10.91.1.207:4174/prod/RokidTerminalMuseum/dist/"
+  },{
+    "id": "test-webgl-viewer",
+    "title": "webgl-render-to-texture",
+    "description": "webgl",
+    "tags": [
+      "webgl"
+    ],
+    "thumbnailUrl": null,
+    "scenePath": "jsarcase/webgl/webgl-render-to-texture.html"
+  }
+]

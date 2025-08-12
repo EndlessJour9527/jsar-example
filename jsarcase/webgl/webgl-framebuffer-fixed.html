@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>WebGL Framebuffer Example (Fixed)</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    
+    canvas {
+      width: 100%;
+      max-width: 512px;
+      height: auto;
+      display: block;
+      margin: 20px auto;
+      border: 2px solid #333;
+      background-color: #000;
+    }
+    
+    .info {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .error {
+      background-color: #ffebee;
+      border-left: 4px solid #f44336;
+    }
+    
+    .success {
+      background-color: #e8f5e8;
+      border-left: 4px solid #4caf50;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>WebGL Framebuffer Example</h1>
+    <canvas id="glcanvas" width="512" height="512"></canvas>
+    <div id="status" class="info">
+      <p>正在初始化WebGL...</p>
+    </div>
+  </div>
+  
+  <script>
+    // 状态显示函数
+    function updateStatus(message, isError = false) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = '<p>' + message + '</p>';
+      statusDiv.className = isError ? 'info error' : 'info success';
+    }
+    
+    // 错误处理
+    window.addEventListener('error', function(e) {
+      updateStatus('JavaScript错误: ' + e.message, true);
+    });
+    
+    // 重写console.error以显示错误
+    const originalConsoleError = console.error;
+    console.error = function(...args) {
+      originalConsoleError.apply(console, args);
+      updateStatus('WebGL错误: ' + args.join(' '), true);
+    };
+  </script>
+  
+  <script src="./js/webgl-framebuffer-fixed.js"></script>
+  
+  <script>
+    // 成功完成后更新状态
+    setTimeout(() => {
+      if (!document.querySelector('.error')) {
+        updateStatus('WebGL帧缓冲区渲染成功完成！');
+      }
+    }, 1000);
+  </script>
+</body>
+
+</html>

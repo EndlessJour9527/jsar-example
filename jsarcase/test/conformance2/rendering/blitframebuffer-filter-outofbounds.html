@@ -1,0 +1,306 @@
+<!--
+Copyright (c) 2019 The Khronos Group Inc.
+Use of this source code is governed by an MIT-style license that can be
+found in the LICENSE.txt file.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL BlitFramebuffer Tests</title>
+<link rel="stylesheet" href="../../resources/js-test-style.css"/>
+<script src="../../js/js-test-pre.js"></script>
+<script src="../../js/webgl-test-utils.js"></script>
+<script src="../../js/webgl-async-loader.js"></script>
+</head>
+<body>
+<canvas id="example" width="8" height="8"></canvas>
+<div id="description"></div>
+<div id="console"></div>
+
+<script type="module">
+"use strict";
+import * as loader from '../../js/webgl-async-loader.js';
+const { waitForWebGLTestGlobals } = loader;
+
+// 将原始测试代码封装为函数
+function runWebGLTest() {
+  try {
+
+
+var wtu = WebGLTestUtils;
+description("This test verifies the functionality of blitFramebuffer when src/dst region are out-of-bounds.");
+
+var gl = wtu.create3DContext("example", undefined, 2);
+
+function checkPixel(color, expectedColor) {
+  var tolerance = 3;
+  return (Math.abs(color[0] - expectedColor[0]) <= tolerance &&
+          Math.abs(color[1] - expectedColor[1]) <= tolerance &&
+          Math.abs(color[2] - expectedColor[2]) <= tolerance &&
+          Math.abs(color[3] - expectedColor[3]) <= tolerance);
+}
+
+function blitframebuffer_filter_outofbounds(readbufferFormat, drawbufferFormat, filter) {
+    debug("");
+    debug("blitting pixels out-of-bounds, read buffer format is: " + wtu.glEnumToString(gl, readbufferFormat) + ", draw buffer format is: " + wtu.glEnumToString(gl, drawbufferFormat) + ", filter is: " + wtu.glEnumToString(gl, filter));
+
+    // Initiate data to read framebuffer
+    var size = 8;
+    var uint_read = new Uint8Array(size * size * 4);
+    var color = 0x20;
+    for (var ii = 0; ii < size * size * 4; ii += 4) {
+        for (var jj = 0; jj < 3; ++jj) {
+          uint_read[ii + jj] = color;
+        }
+        uint_read[ii + 3] = 0xff;
+    }
+
+    // Create read framebuffer and feed data to read buffer
+    // Read buffer may have srgb image
+    var tex_read = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex_read);
+    gl.texImage2D(gl.TEXTURE_2D, 0, readbufferFormat, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, uint_read);
+
+    var fbo_read = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, fbo_read);
+    gl.framebufferTexture2D(gl.READ_FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex_read, 0);
+
+    // Create draw framebuffer. Color in draw buffer is initialized to 0.
+    // Draw buffer may have srgb image
+    var tex_draw = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex_draw);
+    gl.texImage2D(gl.TEXTURE_2D, 0, drawbufferFormat, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+    var fbo_draw = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, fbo_draw);
+    gl.framebufferTexture2D(gl.DRAW_FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex_draw, 0);
+
+    if (gl.checkFramebufferStatus(gl.READ_FRAMEBUFFER) == gl.FRAMEBUFFER_COMPLETE) {
+        // Blit read framebuffer to the image in draw framebuffer.
+        var tests = [
+            // [srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1]
+
+            { args: [-2, -2, 4, 4, 1, 1, 4, 4], changedDstRect: [2, 2, 4, 4], desc: 'only src region is out-of-bounds, dst region has different width/height as src region.'},
+            { args: [-2, -2, 4, 4, 1, 1, 7, 7], changedDstRect: [3, 3, 7, 7], desc: 'only src region is out-of-bounds, dst region has the same width/height as src region.'},
+            { args: [0, 0, 6, 6, 7, 7, 10, 10], changedDstRect: [7, 7, 8, 8], desc: 'only dst region is out-of-bounds, dst region has different width/height as src region after dst region is clipped to the bounds of draw buffer.'},
+            { args: [0, 0, 6, 6, 4, 4, 10, 10], changedDstRect: [4, 4, 8, 8], desc: 'only dst region is out-of-bounds, dst region has the same width/height as src region after dst region is clipped to the bounds of draw buffer.'},
+            { args: [-2, -2, 4, 4, 7, 7, 10, 10], changedDstRect: [8, 8, 8, 8], desc: 'both src and dst region are out-of-bounds, dst region has different width/height as src region after dst region is clipped to the bounds of draw buffer.'},
+            { args: [-2, -2, 4, 4, 4, 4, 10, 10], changedDstRect: [6, 6, 8, 8], desc: 'both src and dst region are out-of-bounds, dst region has the same width/height as src region after dst region is clipped to the bounds of draw buffer.'},
+            { args: [-2, -2, 4, 4, 2, 2, 10, 10], changedDstRect: [2 + 2/6*8, 2 + 2/6*8, 8, 8], desc: 'both src and dst region are out-of-bounds. There are some dst pixels (x and y are within [4, 8] , and x or y equals to 4) whose corresponding src pixels are partially inside and partially outside the real sampling area of the src region (the real sampling area is [0, 0, 4, 4]). But the centers of such src pixels are lying outside the real sampling area.'},
+            { args: [-2, -2, 4, 4, 3, 3, 10, 10], changedDstRect: [5, 5, 8, 8], desc: 'both src and dst region are out-of-bounds. There are some dst pixels (x and y are within [4, 7] , and x or y equals to 5) whose corresponding src pixels are partially inside and partially outside the real sampling area of the src region (the real sampling area is [0, 0, 4, 4]). But the centers of such src pixels are lying inside the real sampling area.'},
+            { args: [-2, -2, 4, 4, 10, 10, 2, 2], changedDstRect: [2, 2, 7, 7], desc: 'both src and dst region are out-of-bounds, and the dst coordinates are reversed. There are some dst pixels (x and y are within [2, 7] , and x or y equals to 7) whose corresponding src pixels are partially inside and partially outside the real sampling area of the src region (the real sampling area is [0, 0, 4, 4]). But the centers of such src pixels are lying outside the real sampling area.'},
+            { args: [-2, -2, 4, 4, 10, 10, 3, 3], changedDstRect: [3, 3, 8, 8], desc: 'both src and dst region are out-of-bounds, and the dst coordinates are reversed. There are some dst pixels (x and y are within [3, 7] , and x or y equals to 7) whose corresponding src pixels are partially inside and partially outside the read sampling area of the src region (the real sampling area is [0, 0, 4, 4]). But the centers of such src pixels are lying inside the real sampling area.'},
+        ];
+
+        var readbufferHasSRGBImage = (readbufferFormat == gl.SRGB8_ALPHA8);
+        var drawbufferHasSRGBImage = (drawbufferFormat == gl.SRGB8_ALPHA8);
+
+        for (const test of tests) {
+            const args = test.args;
+            const changedDstRect = test.changedDstRect;
+            debug("");
+            debug("Both the read framebuffer and draw framebuffer bounds are [0, 0, 8, 8]");
+            debug(`Blitting from src region [${args.slice(0, 4)}] to dst region [${args.slice(4, 8)}]`);
+            debug(`Expects changed dst region of [${changedDstRect}]`);
+            debug(`Explaination: ${test.desc}`);
+            gl.bindFramebuffer(gl.READ_FRAMEBUFFER, fbo_read);
+            gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, fbo_draw);
+            gl.bindTexture(gl.TEXTURE_2D, tex_draw);
+            gl.texImage2D(gl.TEXTURE_2D, 0, drawbufferFormat, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+            gl.blitFramebuffer(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], gl.COLOR_BUFFER_BIT, filter);
+
+            // Read pixels and check the correctness.
+            var pixels = new Uint8Array(size * size * 4);
+            gl.bindFramebuffer(gl.READ_FRAMEBUFFER, fbo_draw);
+            gl.readPixels(0, 0, size, size, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
+
+            for (var ii = 0; ii < size; ++ii) {
+                for (var jj = 0; jj < size; ++jj) {
+                    var loc = ii * size + jj;
+                    var color = [pixels[loc * 4], pixels[loc * 4 + 1], pixels[loc * 4 + 2], pixels[loc * 4 + 3]];
+
+                    var expectedColor = [0, 0, 0, 0];
+                    if (ii >= changedDstRect[0] && ii < changedDstRect[2] && jj >= changedDstRect[1] && jj < changedDstRect[3]) {
+                        expectedColor = [0x20, 0x20, 0x20, 0xff];
+
+                        // We may need to covert the color space for pixels in blit region
+                        if (readbufferHasSRGBImage ^ drawbufferHasSRGBImage) {
+                            if (drawbufferHasSRGBImage) {
+                                expectedColor = wtu.linearToSRGB(expectedColor);
+                            } else {
+                                expectedColor = wtu.sRGBToLinear(expectedColor);
+                            }
+                        }
+                    }
+
+                    if (checkPixel(color, expectedColor) == true) {
+                        testPassed("pixel at [" + jj + ", " + ii + "] is (" + color + "). It is correct!");
+                    } else {
+                        testFailed("pixel at [" + jj + ", " + ii + "] should be (" + expectedColor + "), but the actual color is (" + color + ")");
+                    }
+                }
+            }
+        }
+    } else {
+        testFailed("framebuffer not complete");
+    }
+
+    gl.bindTexture(gl.TEXTURE_2D, null);
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+    gl.deleteFramebuffer(fbo_read);
+    gl.deleteFramebuffer(fbo_draw);
+    gl.deleteTexture(tex_read);
+    gl.deleteTexture(tex_draw);
+};
+
+if (!gl) {
+    testFailed("WebGL context does not exist");
+} else {
+    testPassed("WebGL context exists");
+    var filters = [gl.LINEAR, gl.NEAREST];
+    for (var ii = 0; ii < filters.length; ++ii) {
+        blitframebuffer_filter_outofbounds(gl.RGBA8, gl.RGBA8, filters[ii]);
+        break;
+        blitframebuffer_filter_outofbounds(gl.RGBA8, gl.SRGB8_ALPHA8, filters[ii]);
+        blitframebuffer_filter_outofbounds(gl.SRGB8_ALPHA8, gl.RGBA8, filters[ii]);
+        blitframebuffer_filter_outofbounds(gl.SRGB8_ALPHA8, gl.SRGB8_ALPHA8, filters[ii]);
+    }
+}
+
+
+    var successfullyParsed = true;
+    console.log("✅ WebGL test completed successfully!");
+  } catch (error) {
+    console.error("❌ WebGL test failed:", error);
+    if (typeof debug !== 'undefined') {
+      debug("Test failed: " + error.message);
+    }
+  }
+}
+
+// 环境检测函数
+function isJSARRuntime() {
+  const checks = [
+    () => typeof waitForWebGLTestGlobals !== 'undefined',
+    () => typeof process !== 'undefined' && process.versions && process.versions.node,
+    () => typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('JSAR'),
+    () => typeof global !== 'undefined' && global.process,
+    () => typeof window === 'undefined' && typeof global !== 'undefined',
+    () => typeof module !== 'undefined' && module.exports
+  ];
+  
+  const result = checks.some(check => {
+    try {
+      return check();
+    } catch (e) {
+      return false;
+    }
+  });
+  
+  console.log('🔍 JSAR Runtime detection result:', result);
+  return result;
+}
+
+// 简单轮询等待函数
+function waitForGlobalsSimple(globals, callback, maxAttempts = 300) {
+  let attempts = 0;
+  console.log('🔄 Starting simple polling for globals:', globals);
+  
+  function check() {
+    attempts++;
+    const available = [];
+    const missing = [];
+    
+    globals.forEach(name => {
+      try {
+        if (typeof eval(name) !== 'undefined') {
+          available.push(name);
+        } else {
+          missing.push(name);
+        }
+      } catch (e) {
+        missing.push(name);
+      }
+    });
+    
+    if (missing.length === 0) {
+      console.log('✅ All globals available:', globals);
+      callback();
+    } else if (attempts >= maxAttempts) {
+      console.error('❌ Timeout waiting for globals. Available:', available, 'Missing:', missing);
+    } else {
+      if (attempts % 20 === 0 || attempts <= 5) {
+        console.log(`⏳ Waiting for globals... Available: [${available.join(', ')}], Missing: [${missing.join(', ')}] (${attempts}/${maxAttempts})`);
+      }
+      setTimeout(check, 50);
+    }
+  }
+  
+  check();
+}
+
+// 智能初始化
+function initializeTest() {
+  console.log("🔍 Checking environment and dependencies...");
+  
+  const isJSAR = isJSARRuntime();
+  const hasAsyncLoader = typeof waitForWebGLTestGlobals !== 'undefined';
+  const requiredGlobals = ['description', 'debug', 'WebGLTestUtils'];
+  
+  console.log("Environment info:", {
+    isJSARRuntime: isJSAR,
+    hasAsyncLoader: hasAsyncLoader,
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+  });
+  
+  if (isJSAR || hasAsyncLoader) {
+    console.log("🔄 JSAR Runtime environment detected, using async loader...");
+    
+    if (hasAsyncLoader) {
+      waitForWebGLTestGlobals(runWebGLTest, {
+        maxRetries: 300,
+        retryInterval: 50,
+        timeout: 15000,
+        onTimeout: function() {
+          console.error("❌ Timeout: WebGL test dependencies not available after 15s");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Timeout waiting for dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        },
+        onError: function() {
+          console.error("❌ Error: Failed to load WebGL test dependencies");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Failed to load dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        }
+      });
+    } else {
+      console.log("⏳ No async loader found, using simple polling...");
+      waitForGlobalsSimple(requiredGlobals, runWebGLTest);
+    }
+  } else {
+    console.log("🌐 Browser environment detected, running test directly...");
+    setTimeout(runWebGLTest, 500);
+  }
+}
+
+// 确保DOM加载完成后再初始化
+setTimeout(initializeTest, 500);
+
+</script>
+<!-- <script src="../../js/js-test-post.js"></script> -->
+
+</body>
+</html>

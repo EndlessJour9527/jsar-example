@@ -1,0 +1,247 @@
+<!--
+Copyright (c) 2019 The Khronos Group Inc.
+Use of this source code is governed by an MIT-style license that can be
+found in the LICENSE.txt file.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL BlitFramebuffer Tests</title>
+<link rel="stylesheet" href="../../resources/js-test-style.css"/>
+<script src="../../js/js-test-pre.js"></script>
+<script src="../../js/webgl-test-utils.js"></script>
+<script src="../../js/webgl-async-loader.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="8" height="8"></canvas>
+<div id="description"></div>
+<div id="console"></div>
+
+<script type="module">
+"use strict";
+import * as loader from '../../js/webgl-async-loader.js';
+const { waitForWebGLTestGlobals } = loader;
+
+// 将原始测试代码封装为函数
+function runWebGLTest() {
+  try {
+
+
+var wtu = WebGLTestUtils;
+description("This test verifies the functionality of blitFramebuffer with multisampled sRGB color buffer.");
+
+var gl = wtu.create3DContext("canvas", undefined, 2);
+
+var tex_blit = gl.createTexture();
+var fb0 = gl.createFramebuffer();
+var rb0 = gl.createRenderbuffer();
+var fbo_blit = gl.createFramebuffer();
+var size = 32;
+var program;
+
+if (!gl) {
+    testFailed("WebGL context does not exist");
+} else {
+    testPassed("WebGL context exists");
+
+    init();
+
+    var filters = [gl.LINEAR, gl.NEAREST];
+    for (var ii = 0; ii < filters.length; ++ii) {
+        blitframebuffer_multisampled_readbuffer(gl.SRGB8_ALPHA8, gl.SRGB8_ALPHA8, filters[ii]);
+    }
+}
+
+function init() {
+    program = wtu.setupColorQuad(gl);
+    gl.viewport(0, 0, size, size);
+}
+
+function blitframebuffer_helper(readbufferFormat, drawbufferFormat, filter) {
+    // Create draw framebuffer and feed 0 to draw buffer
+    gl.bindTexture(gl.TEXTURE_2D, tex_blit);
+    gl.texImage2D(gl.TEXTURE_2D, 0, drawbufferFormat, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, fbo_blit);
+    gl.framebufferTexture2D(gl.DRAW_FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex_blit, 0);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "setup draw framebuffer should succeed");
+
+    gl.blitFramebuffer(0, 0, size, size, 0, 0, size, size, gl.COLOR_BUFFER_BIT, filter);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "blitframebuffer should succeed");
+}
+
+function blitframebuffer_multisampled_readbuffer(readbufferFormat, drawbufferFormat, filter) {
+    debug("");
+    debug("Test blitFramebuffer when the read buffer is a multisampled srgb image. The filter is: " + wtu.glEnumToString(gl, filter));
+    debug("read buffer format is: " + wtu.glEnumToString(gl, readbufferFormat) + ", draw buffer format is: " + wtu.glEnumToString(gl, drawbufferFormat));
+
+    // Draw to a multi-sampled srgb image, and blit to a srgb image.
+    gl.bindRenderbuffer(gl.RENDERBUFFER, rb0);
+    gl.renderbufferStorageMultisample(gl.RENDERBUFFER, 4, readbufferFormat, size, size);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb0);
+    gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, rb0);
+    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) != gl.FRAMEBUFFER_COMPLETE) {
+        testFailed("Framebuffer incomplete.");
+        return;
+    }
+    var color = [252, 122, 15, 255];
+    var expectedColor = wtu.linearToSRGB(color);
+    for (var i = 0; i < 4; ++i) {
+        color[i] = color[i] / 255;
+    }
+    // Draw a rectangle. Fill it with solid color.
+    // Note that the draw buffer is a multisampled srgb image. So during drawing, the color will be converted into srgb color space.
+    gl.useProgram(program);
+    wtu.drawFloatColorQuad(gl, color);
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, fb0);
+    blitframebuffer_helper(readbufferFormat, drawbufferFormat, filter);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "Blit from a multi-sampled srgb image to a srgb image should succeed");
+
+    // Compare
+    gl.bindFramebuffer(gl.READ_FRAMEBUFFER, fbo_blit);
+    wtu.checkCanvasRect(gl, 0, 0, size, size, expectedColor);
+}
+
+gl.bindTexture(gl.TEXTURE_2D, null);
+gl.bindRenderbuffer(gl.RENDERBUFFER, null);
+gl.bindFramebuffer(gl.READ_FRAMEBUFFER, null);
+gl.bindFramebuffer(gl.DRAW_FRAMEBUFFER, null);
+gl.deleteRenderbuffer(rb0);
+gl.deleteTexture(tex_blit);
+gl.deleteFramebuffer(fb0);
+gl.deleteFramebuffer(fbo_blit);
+
+
+    var successfullyParsed = true;
+    console.log("✅ WebGL test completed successfully!");
+  } catch (error) {
+    console.error("❌ WebGL test failed:", error);
+    if (typeof debug !== 'undefined') {
+      debug("Test failed: " + error.message);
+    }
+  }
+}
+
+// 环境检测函数
+function isJSARRuntime() {
+  const checks = [
+    () => typeof waitForWebGLTestGlobals !== 'undefined',
+    () => typeof process !== 'undefined' && process.versions && process.versions.node,
+    () => typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('JSAR'),
+    () => typeof global !== 'undefined' && global.process,
+    () => typeof window === 'undefined' && typeof global !== 'undefined',
+    () => typeof module !== 'undefined' && module.exports
+  ];
+  
+  const result = checks.some(check => {
+    try {
+      return check();
+    } catch (e) {
+      return false;
+    }
+  });
+  
+  console.log('🔍 JSAR Runtime detection result:', result);
+  return result;
+}
+
+// 简单轮询等待函数
+function waitForGlobalsSimple(globals, callback, maxAttempts = 300) {
+  let attempts = 0;
+  console.log('🔄 Starting simple polling for globals:', globals);
+  
+  function check() {
+    attempts++;
+    const available = [];
+    const missing = [];
+    
+    globals.forEach(name => {
+      try {
+        if (typeof eval(name) !== 'undefined') {
+          available.push(name);
+        } else {
+          missing.push(name);
+        }
+      } catch (e) {
+        missing.push(name);
+      }
+    });
+    
+    if (missing.length === 0) {
+      console.log('✅ All globals available:', globals);
+      callback();
+    } else if (attempts >= maxAttempts) {
+      console.error('❌ Timeout waiting for globals. Available:', available, 'Missing:', missing);
+    } else {
+      if (attempts % 20 === 0 || attempts <= 5) {
+        console.log(`⏳ Waiting for globals... Available: [${available.join(', ')}], Missing: [${missing.join(', ')}] (${attempts}/${maxAttempts})`);
+      }
+      setTimeout(check, 50);
+    }
+  }
+  
+  check();
+}
+
+// 智能初始化
+function initializeTest() {
+  console.log("🔍 Checking environment and dependencies...");
+  
+  const isJSAR = isJSARRuntime();
+  const hasAsyncLoader = typeof waitForWebGLTestGlobals !== 'undefined';
+  const requiredGlobals = ['description', 'debug', 'WebGLTestUtils'];
+  
+  console.log("Environment info:", {
+    isJSARRuntime: isJSAR,
+    hasAsyncLoader: hasAsyncLoader,
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+  });
+  
+  if (isJSAR || hasAsyncLoader) {
+    console.log("🔄 JSAR Runtime environment detected, using async loader...");
+    
+    if (hasAsyncLoader) {
+      waitForWebGLTestGlobals(runWebGLTest, {
+        maxRetries: 300,
+        retryInterval: 50,
+        timeout: 15000,
+        onTimeout: function() {
+          console.error("❌ Timeout: WebGL test dependencies not available after 15s");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Timeout waiting for dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        },
+        onError: function() {
+          console.error("❌ Error: Failed to load WebGL test dependencies");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Failed to load dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        }
+      });
+    } else {
+      console.log("⏳ No async loader found, using simple polling...");
+      waitForGlobalsSimple(requiredGlobals, runWebGLTest);
+    }
+  } else {
+    console.log("🌐 Browser environment detected, running test directly...");
+    setTimeout(runWebGLTest, 500);
+  }
+}
+
+// 确保DOM加载完成后再初始化
+setTimeout(initializeTest, 500);
+
+</script>
+<!-- <script src="../../js/js-test-post.js"></script> -->
+
+</body>
+</html>

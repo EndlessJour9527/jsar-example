@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互对象 - ThreeJS XR 测试案例</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            pointer-events: none;
+            text-shadow: 0 0 5px black;
+        }
+        #back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            z-index: 100;
+        }
+        #back-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        #vr-button {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            z-index: 100;
+        }
+        #vr-button:hover {
+            background-color: #0b7dda;
+        }
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            max-width: 300px;
+        }
+    </style>
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="info">交互对象 - 可以与场景中的对象进行交互</div>
+    <button id="back-button" onclick="window.location.href='../index.html'">返回</button>
+    <button id="vr-button">进入 VR</button>
+    <div id="instructions">
+        <h3>操作说明：</h3>
+        <p>- 桌面模式：点击并拖动对象</p>
+        <p>- VR模式：使用控制器触发按钮抓取对象</p>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { VRButton } from 'three/addons/webxr/VRButton.js';
+        import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFactory.js';
+
+        // 场景初始化
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x505050);
+
+        // 相机设置
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.6, 3);
+
+        // 渲染器设置
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.xr.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // VR按钮
+        document.getElementById('vr-button').addEventListener('click', function() {
+            document.body.appendChild(VRButton.createButton(renderer));
+            document.getElementById('vr-button').style.display = 'none';
+        });
+
+        // 控制器
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.target.set(0, 1, 0);
+        controls.update();
+
+        // 光照设置
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(1, 3, 2);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+
+        // 地面
+        const floorGeometry = new THREE.PlaneGeometry(10, 10);
+        const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x808080, roughness: 0.8 });
+        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+        floor.rotation.x = -Math.PI / 2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // 网格辅助
+        const gridHelper = new THREE.GridHelper(10, 10);
+        scene.add(gridHelper);
+
+        // 创建桌子
+        const tableGeometry = new THREE.BoxGeometry(1.5, 0.05, 1);
+        const tableMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.7 });
+        const table = new THREE.Mesh(tableGeometry, tableMaterial);
+        table.position.set(0, 0.8, 0);
+        table.castShadow = true;
+        table.receiveShadow = true;
+        scene.add(table);
+
+        // 桌腿
+        const legGeometry = new THREE.CylinderGeometry(0.05, 0.05, 0.8);
+        const legMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.7 });
+        
+        const leg1 = new THREE.Mesh(legGeometry, legMaterial);
+        leg1.position.set(0.65, 0.4, 0.4);
+        leg1.castShadow = true;
+        scene.add(leg1);
+        
+        const leg2 = new THREE.Mesh(legGeometry, legMaterial);
+        leg2.position.set(-0.65, 0.4, 0.4);
+        leg2.castShadow = true;
+        scene.add(leg2);
+        
+        const leg3 = new THREE.Mesh(legGeometry, legMaterial);
+        leg3.position.set(0.65, 0.4, -0.4);
+        leg3.castShadow = true;
+        scene.add(leg3);
+        
+        const leg4 = new THREE.Mesh(legGeometry, legMaterial);
+        leg4.position.set(-0.65, 0.4, -0.4);
+        leg4.castShadow = true;
+        scene.add(leg4);
+
+        // 创建可交互对象
+        const interactiveObjects = [];
+
+        // 立方体
+        const cubeGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+        const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.7 });
+        const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.position.set(-0.4, 0.95, 0);
+        cube.castShadow = true;
+        cube.userData.interactable = true;
+        scene.add(cube);
+        interactiveObjects.push(cube);
+
+        // 球体
+        const sphereGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+        const sphereMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, roughness: 0.2 });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.position.set(0, 0.95, 0);
+        sphere.castShadow = true;
+        sphere.userData.interactable = true;
+        scene.add(sphere);
+        interactiveObjects.push(sphere);
+
+        // 圆锥体
+        const coneGeometry = new THREE.ConeGeometry(0.1, 0.2, 32);
+        const coneMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00, roughness: 0.5 });
+        const cone = new THREE.Mesh(coneGeometry, coneMaterial);
+        cone.position.set(0.4, 0.95, 0);
+        cone.castShadow = true;
+        cone.userData.interactable = true;
+        scene.add(cone);
+        interactiveObjects.push(cone);
+
+        // 环面
+        const torusGeometry = new THREE.TorusGeometry(0.1, 0.04, 16, 100);
+        const torusMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00, roughness: 0.3 });
+        const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+        torus.position.set(0, 0.95, -0.3);
+        torus.castShadow = true;
+        torus.userData.interactable = true;
+        scene.add(torus);
+        interactiveObjects.push(torus);
+
+        // 射线投射器
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let selectedObject = null;
+        let selectedObjectDistance = 0;
+        let selectedObjectInitialPosition = new THREE.Vector3();
+
+        // 鼠标事件
+        function onMouseMove(event) {
+            // 计算鼠标位置的标准化设备坐标
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            if (selectedObject) {
+                // 更新射线
+                raycaster.setFromCamera(mouse, camera);
+                const intersectionPoint = new THREE.Vector3();
+                raycaster.ray.at(selectedObjectDistance, intersectionPoint);
+                
+                // 移动选中的对象
+                selectedObject.position.copy(intersectionPoint);
+                
+                // 确保对象不会掉到桌子下面
+                if (selectedObject.position.y < 0.95) {
+                    selectedObject.position.y = 0.95;
+                }
+            }
+        }
+
+        function onMouseDown(event) {
+            // 计算鼠标位置的标准化设备坐标
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+            // 更新射线
+            raycaster.setFromCamera(mouse, camera);
+
+            // 检查射线与可交互对象的交点
+            const intersects = raycaster.intersectObjects(interactiveObjects);
+
+            if (intersects.length > 0) {
+                // 禁用轨道控制器
+                controls.enabled = false;
+                
+                // 选择第一个相交的对象
+                selectedObject = intersects[0].object;
+                selectedObjectDistance = intersects[0].distance;
+                selectedObjectInitialPosition = selectedObject.position.clone();
+                
+                // 改变对象颜色以指示选中状态
+                selectedObject.material.emissive.set(0x555555);
+            }
+        }
+
+        function onMouseUp() {
+            if (selectedObject) {
+                // 恢复对象的原始颜色
+                selectedObject.material.emissive.set(0x000000);
+                selectedObject = null;
+            }
+            
+            // 重新启用轨道控制器
+            controls.enabled = true;
+        }
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mouseup', onMouseUp);
+
+        // VR控制器设置
+        const controllerModelFactory = new XRControllerModelFactory();
+        
+        // 控制器1
+        const controller1 = renderer.xr.getController(0);
+        controller1.addEventListener('selectstart', onSelectStart);
+        controller1.addEventListener('selectend', onSelectEnd);
+        scene.add(controller1);
+
+        const controllerGrip1 = renderer.xr.getControllerGrip(0);
+        controllerGrip1.add(controllerModelFactory.createControllerModel(controllerGrip1));
+        scene.add(controllerGrip1);
+
+        // 控制器2
+        const controller2 = renderer.xr.getController(1);
+        controller2.addEventListener('selectstart', onSelectStart);
+        controller2.addEventListener('selectend', onSelectEnd);
+        scene.add(controller2);
+
+        const controllerGrip2 = renderer.xr.getControllerGrip(1);
+        controllerGrip2.add(controllerModelFactory.createControllerModel(controllerGrip2));
+        scene.add(controllerGrip2);
+
+        // 控制器射线辅助
+        const geometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1)]);
+        const line = new THREE.Line(geometry);
+        line.scale.z = 5;
+
+        controller1.add(line.clone());
+        controller2.add(line.clone());
+
+        // VR控制器交互
+        let selectedController = null;
+        const tempMatrix = new THREE.Matrix4();
+
+        function onSelectStart(event) {
+            const controller = event.target;
+            
+            // 创建射线
+            tempMatrix.identity().extractRotation(controller.matrixWorld);
+            raycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld);
+            raycaster.ray.direction.set(0, 0, -1).applyMatrix4(tempMatrix);
+            
+            // 检查射线与可交互对象的交点
+            const intersects = raycaster.intersectObjects(interactiveObjects);
+            
+            if (intersects.length > 0) {
+                selectedController = controller;
+                const object = intersects[0].object;
+                
+                // 将对象附加到控制器
+                object.matrix.premultiply(controller.matrixWorld);
+                object.matrix.decompose(object.position, object.quaternion, object.scale);
+                object.material.emissive.set(0x555555);
+                controller.userData.selected = object;
+                
+                // 振动反馈
+                if (controller.gamepad) {
+                    controller.gamepad.hapticActuators[0].pulse(0.5, 100);
+                }
+            }
+        }
+
+        function onSelectEnd(event) {
+            const controller = event.target;
+            
+            if (controller.userData.selected) {
+                const object = controller.userData.selected;
+                object.material.emissive.set(0x000000);
+                controller.userData.selected = undefined;
+                
+                // 振动反馈
+                if (controller.gamepad) {
+                    controller.gamepad.hapticActuators[0].pulse(0.2, 50);
+                }
+            }
+            
+            selectedController = null;
+        }
+
+        // 动画
+        function animate() {
+            renderer.setAnimationLoop(render);
+        }
+
+        function render() {
+            // 更新VR控制器中的对象
+            if (selectedController) {
+                const object = selectedController.userData.selected;
+                if (object) {
+                    object.matrix.premultiply(selectedController.matrixWorld);
+                    object.matrix.decompose(object.position, object.quaternion, object.scale);
+                }
+            }
+
+            // 旋转环面
+            torus.rotation.x += 0.01;
+            torus.rotation.y += 0.005;
+
+            renderer.render(scene, camera);
+        }
+
+        // 窗口大小调整
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        window.addEventListener('resize', onWindowResize);
+
+        animate();
+    </script>
+</body>
+</html>

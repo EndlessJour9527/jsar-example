@@ -1,0 +1,14 @@
+Received command buffer response(GL::ContextInit) in 287ms which blocks the main thread.
+Received command buffer response(GL::Context2Init) in 26ms which blocks the main thread.
+Debugger listening on ws://0.0.0.0:9484/a1bb69e0-0abe-44a4-be72-241b3aec293f
+For help, see: https://nodejs.org/en/docs/inspector
+Received command buffer response(GL::GetExtensions) in 33ms which blocks the main thread.
+#
+# Unhandled rejection:
+#
+Error: Failed to fetch(http://127.0.0.1:5566/webgl-2d-geometry-translate-better.html), statusCode=404
+    at #we (/Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/scripts/jsar-client-entry.js:1844:1384958)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async B (/Users/next/develop/git-proj/jsar-zone/example/jsar-example/jsarcase/webgl2/.cache/scripts/jsar-client-entry.js:1844:1381801)
+
+

@@ -1,0 +1,195 @@
+07-23 16:17:23.332 19792 19792 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+07-23 16:17:23.332 19792 19792 F DEBUG   : Build fingerprint: 'Rokid/station2/station2:13/TKQ1.231110.001/3.43.001-20250722-130101:userdebug/release-keys'
+07-23 16:17:23.332 19792 19792 F DEBUG   : Revision: '0'
+07-23 16:17:23.332 19792 19792 F DEBUG   : ABI: 'arm64'
+07-23 16:17:23.332 19792 19792 F DEBUG   : Timestamp: 2025-07-23 16:17:22.760577683+0800
+07-23 16:17:23.332 19792 19792 F DEBUG   : Process uptime: 5637s
+07-23 16:17:23.332 19792 19792 F DEBUG   : Cmdline: com.rokid.Naboo
+07-23 16:17:23.332 19792 19792 F DEBUG   : pid: 12602, tid: 12764, name: UnityMain  >>> com.rokid.Naboo <<<
+07-23 16:17:23.332 19792 19792 F DEBUG   : uid: 1000
+07-23 16:17:23.332 19792 19792 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+07-23 16:17:23.332 19792 19792 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+07-23 16:17:23.332 19792 19792 F DEBUG   : Abort message: 'terminating with uncaught exception of type rust::cxxbridge1::Error: relative URL without a base'
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x0  0000000000000000  x1  00000000000031dc  x2  0000000000000006  x3  0000006e840e90b0
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x4  736f646277641f73  x5  736f646277641f73  x6  736f646277641f73  x7  7f7f7f7f7f7f7f7f
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x8  00000000000000f0  x9  00000071beb54ba8  x10 0000000000000001  x11 00000071beb94a00
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x12 00000071c95b2020  x13 000000007fffffff  x14 0000000001c91ff2  x15 0000018842fa46c9
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x16 00000071bebfcd68  x17 00000071bebd8690  x18 0000006dc59691b8  x19 000000000000313a
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x20 00000000000031dc  x21 00000000ffffffff  x22 0000006e840e91e0  x23 0000006e840e9220
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x24 0000006e840e9300  x25 0000006e840e9248  x26 0000006e04bb4a6c  x27 0000006dc2542720
+07-23 16:17:23.332 19792 19792 F DEBUG   :     x28 000000000000d95d  x29 0000006e840e9130
+07-23 16:17:23.332 19792 19792 F DEBUG   :     lr  00000071beb8593c  sp  0000006e840e9090  pc  00000071beb85968  pst 0000000000001000
+07-23 16:17:23.332 19792 19792 F DEBUG   : backtrace:
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #00 pc 0000000000052968  /apex/com.android.runtime/lib64/bionic/libc.so (abort+168) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #01 pc 0000000003d47d0c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (abort_message+240) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #02 pc 0000000003d47f38  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (demangling_terminate_handler()+264) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #03 pc 0000000003d47dc4  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (std::__terminate(void (*)())+16) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #04 pc 0000000003d470a8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (__cxxabiv1::failed_throw(__cxxabiv1::__cxa_exception*)+32) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #05 pc 0000000003d47000  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (__cxa_throw+124) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #06 pc 0000000003cd8c3c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (crates::parseURL(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > const&)+240) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #07 pc 0000000003e24a98  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrContentRuntime::tryDispatchRequest()+96) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #08 pc 0000000003e24a24  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrContentRuntime::start(TrDocumentRequestInit&)+100) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #09 pc 0000000003e176f0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrConstellation::open(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::optional<TrDocumentRequestInit>)+256) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #10 pc 0000000003f2e940  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TransmuteUnity_Open+188) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #11 pc 0000000004e4b818  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #12 pc 0000000004e4b6cc  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #13 pc 0000000004e489c0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #14 pc 00000000028ec38c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #15 pc 00000000028ecc98  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #16 pc 00000000053e8e50  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #17 pc 000000000236527c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #18 pc 00000000023651c8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:17:23.332 19792 19792 F DEBUG   :       #19 pc 0000000000933d14  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #20 pc 0000000000942018  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #21 pc 000000000094dd9c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #22 pc 000000000094d994  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #23 pc 000000000074f090  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #24 pc 000000000081edf8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #25 pc 000000000081ee38  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #26 pc 000000000081f0cc  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #27 pc 00000000009ba804  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #28 pc 00000000009d4930  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #29 pc 000000000021a354  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+148) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #30 pc 000000000020a2b0  /apex/com.android.art/lib64/libart.so (nterp_helper+4016) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #31 pc 0000000000066350  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/base.apk (com.unity3d.player.UnityPlayer.-$$Nest$mnativeRender+0)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #32 pc 00000000020010b0  /memfd:jit-cache (deleted) (offset 0x2000000) (com.unity3d.player.UnityPlayer$F$a.handleMessage+800)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #33 pc 0000000000563234  /system/framework/arm64/boot-framework.oat (android.os.Handler.dispatchMessage+148) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #34 pc 0000000000566568  /system/framework/arm64/boot-framework.oat (android.os.Looper.loopOnce+1032) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #35 pc 00000000005660c0  /system/framework/arm64/boot-framework.oat (android.os.Looper.loop+560) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #36 pc 0000000000209398  /apex/com.android.art/lib64/libart.so (nterp_helper+152) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #37 pc 00000000000653f0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/base.apk (com.unity3d.player.UnityPlayer$F.run+48)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #38 pc 000000000021096c  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+556) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #39 pc 000000000027b478  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+188) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #40 pc 00000000006118e8  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #41 pc 0000000000659b9c  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1292) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #42 pc 00000000000ba800  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+208) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:17:23.333 19792 19792 F DEBUG   :       #43 pc 00000000000541b0  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:18:31.735 21407 21407 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+07-23 16:18:31.735 21407 21407 F DEBUG   : Build fingerprint: 'Rokid/station2/station2:13/TKQ1.231110.001/3.43.001-20250722-130101:userdebug/release-keys'
+07-23 16:18:31.735 21407 21407 F DEBUG   : Revision: '0'
+07-23 16:18:31.735 21407 21407 F DEBUG   : ABI: 'arm64'
+07-23 16:18:31.735 21407 21407 F DEBUG   : Timestamp: 2025-07-23 16:18:31.268564531+0800
+07-23 16:18:31.735 21407 21407 F DEBUG   : Process uptime: 69s
+07-23 16:18:31.735 21407 21407 F DEBUG   : Cmdline: com.rokid.Naboo
+07-23 16:18:31.735 21407 21407 F DEBUG   : pid: 19831, tid: 19898, name: UnityMain  >>> com.rokid.Naboo <<<
+07-23 16:18:31.735 21407 21407 F DEBUG   : uid: 1000
+07-23 16:18:31.735 21407 21407 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+07-23 16:18:31.735 21407 21407 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+07-23 16:18:31.735 21407 21407 F DEBUG   : Abort message: 'terminating with uncaught exception of type rust::cxxbridge1::Error: relative URL without a base'
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x0  0000000000000000  x1  0000000000004dba  x2  0000000000000006  x3  0000006e209ad1a0
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x4  736f646277641f73  x5  736f646277641f73  x6  736f646277641f73  x7  7f7f7f7f7f7f7f7f
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x8  00000000000000f0  x9  00000071beb54ba8  x10 0000000000000001  x11 00000071beb94a00
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x12 00000071c95b2020  x13 000000007fffffff  x14 0000000001c9a6b6  x15 0000018891f11f33
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x16 00000071bebfcd68  x17 00000071bebd8690  x18 0000006dd49c5f18  x19 0000000000004d77
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x20 0000000000004dba  x21 00000000ffffffff  x22 0000006e209ad2d0  x23 0000006e209ad310
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x24 0000006e209ad3f0  x25 0000006e209ad338  x26 0000006e0dfbea6c  x27 0000006dd2542770
+07-23 16:18:31.735 21407 21407 F DEBUG   :     x28 00000000000009d9  x29 0000006e209ad220
+07-23 16:18:31.735 21407 21407 F DEBUG   :     lr  00000071beb8593c  sp  0000006e209ad180  pc  00000071beb85968  pst 0000000000001000
+07-23 16:18:31.736 21407 21407 F DEBUG   : backtrace:
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #00 pc 0000000000052968  /apex/com.android.runtime/lib64/bionic/libc.so (abort+168) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #01 pc 0000000003d47d0c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (abort_message+240) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #02 pc 0000000003d47f38  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (demangling_terminate_handler()+264) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #03 pc 0000000003d47dc4  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (std::__terminate(void (*)())+16) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #04 pc 0000000003d470a8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (__cxxabiv1::failed_throw(__cxxabiv1::__cxa_exception*)+32) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #05 pc 0000000003d47000  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (__cxa_throw+124) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #06 pc 0000000003cd8c3c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (crates::parseURL(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > const&)+240) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #07 pc 0000000003e24a98  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrContentRuntime::tryDispatchRequest()+96) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #08 pc 0000000003e24a24  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrContentRuntime::start(TrDocumentRequestInit&)+100) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #09 pc 0000000003e176f0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrConstellation::open(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::optional<TrDocumentRequestInit>)+256) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #10 pc 0000000003f2e940  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TransmuteUnity_Open+188) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #11 pc 0000000004e4b818  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #12 pc 0000000004e4b6cc  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #13 pc 0000000004e489c0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #14 pc 00000000028ec38c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #15 pc 00000000028ecc98  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #16 pc 00000000053e8e50  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #17 pc 000000000236527c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #18 pc 00000000023651c8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #19 pc 0000000000933d14  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #20 pc 0000000000942018  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #21 pc 000000000094dd9c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #22 pc 000000000094d994  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #23 pc 000000000074f090  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #24 pc 000000000081edf8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #25 pc 000000000081ee38  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #26 pc 000000000081f0cc  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #27 pc 00000000009ba804  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #28 pc 00000000009d4930  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #29 pc 000000000003a3e4  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/oat/arm64/base.odex (art_jni_trampoline+116)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #30 pc 0000000000041538  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/oat/arm64/base.odex (com.unity3d.player.UnityPlayer$F$a.handleMessage+840)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #31 pc 0000000000563234  /system/framework/arm64/boot-framework.oat (android.os.Handler.dispatchMessage+148) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #32 pc 0000000000566568  /system/framework/arm64/boot-framework.oat (android.os.Looper.loopOnce+1032) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #33 pc 00000000005660c0  /system/framework/arm64/boot-framework.oat (android.os.Looper.loop+560) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #34 pc 0000000000209398  /apex/com.android.art/lib64/libart.so (nterp_helper+152) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #35 pc 00000000000653f0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/base.apk (com.unity3d.player.UnityPlayer$F.run+48)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #36 pc 000000000021096c  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+556) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #37 pc 000000000027b478  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+188) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #38 pc 00000000006118e8  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #39 pc 0000000000659b9c  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1292) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #40 pc 00000000000ba800  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+208) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:18:31.736 21407 21407 F DEBUG   :       #41 pc 00000000000541b0  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:19:17.485 22419 22419 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+07-23 16:19:17.485 22419 22419 F DEBUG   : Build fingerprint: 'Rokid/station2/station2:13/TKQ1.231110.001/3.43.001-20250722-130101:userdebug/release-keys'
+07-23 16:19:17.485 22419 22419 F DEBUG   : Revision: '0'
+07-23 16:19:17.485 22419 22419 F DEBUG   : ABI: 'arm64'
+07-23 16:19:17.485 22419 22419 F DEBUG   : Timestamp: 2025-07-23 16:19:17.038447899+0800
+07-23 16:19:17.485 22419 22419 F DEBUG   : Process uptime: 45s
+07-23 16:19:17.485 22419 22419 F DEBUG   : Cmdline: com.rokid.Naboo
+07-23 16:19:17.485 22419 22419 F DEBUG   : pid: 21476, tid: 21533, name: UnityMain  >>> com.rokid.Naboo <<<
+07-23 16:19:17.485 22419 22419 F DEBUG   : uid: 1000
+07-23 16:19:17.485 22419 22419 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+07-23 16:19:17.486 22419 22419 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+07-23 16:19:17.486 22419 22419 F DEBUG   : Abort message: 'terminating with uncaught exception of type rust::cxxbridge1::Error: relative URL without a base'
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x0  0000000000000000  x1  000000000000541d  x2  0000000000000006  x3  0000006e2089e1a0
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x4  736f646277641f73  x5  736f646277641f73  x6  736f646277641f73  x7  7f7f7f7f7f7f7f7f
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x8  00000000000000f0  x9  00000071beb54ba8  x10 0000000000000001  x11 00000071beb94a00
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x12 00000071c95b2020  x13 000000007fffffff  x14 0000000001ca0026  x15 00000188c6598111
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x16 00000071bebfcd68  x17 00000071bebd8690  x18 0000006dd4b42558  x19 00000000000053e4
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x20 000000000000541d  x21 00000000ffffffff  x22 0000006e2089e2d0  x23 0000006e2089e310
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x24 0000006e2089e3f0  x25 0000006e2089e338  x26 0000006e13417a6c  x27 0000006dd2542720
+07-23 16:19:17.486 22419 22419 F DEBUG   :     x28 0000000000000610  x29 0000006e2089e220
+07-23 16:19:17.486 22419 22419 F DEBUG   :     lr  00000071beb8593c  sp  0000006e2089e180  pc  00000071beb85968  pst 0000000000001000
+07-23 16:19:17.486 22419 22419 F DEBUG   : backtrace:
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #00 pc 0000000000052968  /apex/com.android.runtime/lib64/bionic/libc.so (abort+168) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #01 pc 0000000003d47d0c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (abort_message+240) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #02 pc 0000000003d47f38  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (demangling_terminate_handler()+264) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #03 pc 0000000003d47dc4  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (std::__terminate(void (*)())+16) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #04 pc 0000000003d470a8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (__cxxabiv1::failed_throw(__cxxabiv1::__cxa_exception*)+32) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #05 pc 0000000003d47000  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (__cxa_throw+124) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #06 pc 0000000003cd8c3c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (crates::parseURL(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> > const&)+240) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #07 pc 0000000003e24a98  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrContentRuntime::tryDispatchRequest()+96) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #08 pc 0000000003e24a24  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrContentRuntime::start(TrDocumentRequestInit&)+100) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #09 pc 0000000003e176f0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TrConstellation::open(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char> >, std::__ndk1::optional<TrDocumentRequestInit>)+256) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #10 pc 0000000003f2e940  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libTransmuteCore.so (TransmuteUnity_Open+188) (BuildId: 95dd9a2af77eaf6e091674386fea7c88e53893d0)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #11 pc 0000000004e4b818  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #12 pc 0000000004e4b6cc  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #13 pc 0000000004e489c0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #14 pc 00000000028ec38c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #15 pc 00000000028ecc98  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #16 pc 00000000053e8e50  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #17 pc 000000000236527c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #18 pc 00000000023651c8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libil2cpp.so (BuildId: fd649b226b5fddba4fd33fbb9a90f51ed4f0bf69)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #19 pc 0000000000933d14  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #20 pc 0000000000942018  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #21 pc 000000000094dd9c  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #22 pc 000000000094d994  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #23 pc 000000000074f090  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #24 pc 000000000081edf8  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #25 pc 000000000081ee38  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #26 pc 000000000081f0cc  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #27 pc 00000000009ba804  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #28 pc 00000000009d4930  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/lib/arm64/libunity.so (BuildId: c0245133c8fa0812ed52080d29ae3eea26bac29e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #29 pc 000000000003a3e4  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/oat/arm64/base.odex (art_jni_trampoline+116)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #30 pc 0000000000041538  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/oat/arm64/base.odex (com.unity3d.player.UnityPlayer$F$a.handleMessage+840)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #31 pc 0000000000563234  /system/framework/arm64/boot-framework.oat (android.os.Handler.dispatchMessage+148) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #32 pc 0000000000566568  /system/framework/arm64/boot-framework.oat (android.os.Looper.loopOnce+1032) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #33 pc 00000000005660c0  /system/framework/arm64/boot-framework.oat (android.os.Looper.loop+560) (BuildId: 07d99a240c7aa00813ada23c3e988afae7c0043e)
+07-23 16:19:17.486 22419 22419 F DEBUG   :       #34 pc 0000000000209398  /apex/com.android.art/lib64/libart.so (nterp_helper+152) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:19:17.487 22419 22419 F DEBUG   :       #35 pc 00000000000653f0  /data/app/~~ibcUu32Q6U3CY3nPbhlq6A==/com.rokid.Naboo-0XfUz15qZdOLSMBH7uXkuw==/base.apk (com.unity3d.player.UnityPlayer$F.run+48)
+07-23 16:19:17.487 22419 22419 F DEBUG   :       #36 pc 000000000021096c  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+556) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:19:17.487 22419 22419 F DEBUG   :       #37 pc 000000000027b478  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+188) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:19:17.487 22419 22419 F DEBUG   :       #38 pc 00000000006118e8  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithJValues<art::ArtMethod*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, art::ArtMethod*, jvalue const*)+464) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:19:17.487 22419 22419 F DEBUG   :       #39 pc 0000000000659b9c  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1292) (BuildId: 3fdfb8b8ec5407af450c28a00ba584a8)
+07-23 16:19:17.487 22419 22419 F DEBUG   :       #40 pc 00000000000ba800  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+208) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+07-23 16:19:17.487 22419 22419 F DEBUG   :       #41 pc 00000000000541b0  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: c7b7d7651e0f51532fb76e6d9cd3c193)
+--------- beginning of main

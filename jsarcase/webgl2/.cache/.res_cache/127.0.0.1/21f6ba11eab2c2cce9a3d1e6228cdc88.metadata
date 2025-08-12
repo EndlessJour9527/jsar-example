@@ -1,0 +1,15 @@
+{
+  "url": "http://127.0.0.1:5566/jsarcase/webgl2/resources/webgl-utils.js",
+  "vary": "Origin",
+  "access-control-allow-credentials": "true",
+  "accept-ranges": "bytes",
+  "cache-control": "public, max-age=0",
+  "last-modified": "Thu, 07 Aug 2025 07:12:25 GMT",
+  "etag": "W/\"c383-198835fb8b8\"",
+  "content-type": "application/javascript; charset=UTF-8",
+  "content-length": "50051",
+  "date": "Thu, 07 Aug 2025 09:44:11 GMT",
+  "connection": "keep-alive",
+  "keep-alive": "timeout=5",
+  "contentHash": "2a91b2e2d5d7d0c6bfbb9e9aa0b1c628"
+}

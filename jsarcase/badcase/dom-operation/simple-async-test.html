@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Simple Async Test</title>
+</head>
+<body>
+  <h1>Simple Async Test</h1>
+  
+  <!-- Load the test script -->
+  <script src="./test-import.js"></script>
+  
+  <script>
+    console.log('=== Starting Simple Async Test ===');
+    
+    let attempts = 0;
+    const maxAttempts = 50;
+    
+    function checkTestImport() {
+      attempts++;
+      console.log(`Attempt ${attempts}: Checking for testImport...`);
+      
+      if (typeof testImport !== 'undefined') {
+        console.log('✅ SUCCESS: testImport is available!');
+        console.log('testImport type:', typeof testImport);
+        
+        try {
+          testImport();
+          console.log('✅ SUCCESS: testImport function executed successfully!');
+        } catch (error) {
+          console.log('❌ ERROR calling testImport:', error.message);
+        }
+        
+        console.log('=== Test Completed Successfully ===');
+        return;
+      }
+      
+      if (attempts >= maxAttempts) {
+        console.log('❌ FAILED: testImport not available after', maxAttempts, 'attempts');
+        console.log('=== Test Failed ===');
+        return;
+      }
+      
+      console.log('testImport is undefined, retrying in 50ms...');
+      setTimeout(checkTestImport, 50);
+    }
+    
+    // Start checking immediately
+    checkTestImport();
+  </script>
+</body>
+</html>

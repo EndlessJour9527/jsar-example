@@ -1,0 +1,15 @@
+{
+  "url": "http://127.0.0.1:5566/jsarcase/webgl2/resources/webgl-tutorials.css",
+  "vary": "Origin",
+  "access-control-allow-credentials": "true",
+  "accept-ranges": "bytes",
+  "cache-control": "public, max-age=0",
+  "last-modified": "Thu, 07 Aug 2025 07:12:25 GMT",
+  "etag": "W/\"989-198835fb8b7\"",
+  "content-type": "text/css; charset=UTF-8",
+  "content-length": "2441",
+  "date": "Thu, 07 Aug 2025 09:44:11 GMT",
+  "connection": "keep-alive",
+  "keep-alive": "timeout=5",
+  "contentHash": "86807385a4e5d67c7cb10746a12ebd6d"
+}

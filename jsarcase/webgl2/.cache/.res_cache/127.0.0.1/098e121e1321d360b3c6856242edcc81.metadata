@@ -1,0 +1,15 @@
+{
+  "url": "http://127.0.0.1:5566/jsarcase/webgl2/webgl-2d-geometry-translate-better.html",
+  "vary": "Origin",
+  "access-control-allow-credentials": "true",
+  "accept-ranges": "bytes",
+  "cache-control": "public, max-age=0",
+  "last-modified": "Thu, 07 Aug 2025 07:14:46 GMT",
+  "etag": "W/\"17a0-1988361e09c\"",
+  "content-type": "text/html; charset=UTF-8",
+  "content-length": "7541",
+  "date": "Thu, 07 Aug 2025 09:44:10 GMT",
+  "connection": "keep-alive",
+  "keep-alive": "timeout=5",
+  "contentHash": "1bb7d24bc097809661554d3618bf2d9d"
+}

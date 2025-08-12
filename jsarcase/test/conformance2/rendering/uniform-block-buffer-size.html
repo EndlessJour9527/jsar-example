@@ -1,0 +1,363 @@
+<!--
+Copyright (c) 2019 The Khronos Group Inc.
+Use of this source code is governed by an MIT-style license that can be
+found in the LICENSE.txt file.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>WebGL UniformBlock Buffer Size Conformance Tests</title>
+<link rel="stylesheet" href="../../resources/js-test-style.css"/>
+<script src="../../js/js-test-pre.js"></script>
+<script src="../../js/webgl-test-utils.js"></script>
+<script id='vshader' type='x-shader/x-vertex'>#version 300 es
+layout(location=0) in vec3 p;
+void main()
+{
+    gl_Position = vec4(p.xyz, 1.0);
+}
+</script>
+<script id='fshader' type='x-shader/x-fragment'>#version 300 es
+precision mediump float;
+layout(location=0) out vec4 oColor;
+
+uniform UBOData {
+    float UBORed;
+    float UBOGreen;
+    float UBOBlue;
+};
+
+void main()
+{
+    oColor = vec4(UBORed, UBOGreen, UBOBlue, 1.0);
+}
+</script>
+<script src="../../js/webgl-async-loader.js"></script>
+</head>
+<body>
+<div id="description"></div>
+<canvas id="canvas" style="width: 50px; height: 50px;"> </canvas>
+<div id="console"></div>
+<script type="module">
+"use strict";
+import * as loader from '../../js/webgl-async-loader.js';
+const { waitForWebGLTestGlobals } = loader;
+
+// 将原始测试代码封装为函数
+function runWebGLTest() {
+  try {
+
+description("This test verifies an active UniformBlock should be populated with a large enough buffer object");
+
+debug("");
+
+var wtu = WebGLTestUtils;
+var canvas = document.getElementById("canvas");
+var gl = navigator.gl || wtu.create3DContext(canvas, null, 2);
+
+if (!gl) {
+    testFailed("WebGL context does not exist");
+} else {
+    testPassed("WebGL context exists");
+
+    runDrawArraysTests();
+    runDrawElementsTests();
+}
+
+function runDrawArraysTests() {
+    debug("");
+    debug("Testing drawArrays and drawArraysInstanced");
+
+    var instanceCount = 4;
+
+    var program = wtu.setupProgram(gl, ['vshader', 'fshader']);
+    if (!program) {
+        testFailed("Could not compile shader with uniform blocks without error");
+        return;
+    }
+
+    var blockIndex = gl.getUniformBlockIndex(program, "UBOData");
+    var blockSize = gl.getActiveUniformBlockParameter(program, blockIndex, gl.UNIFORM_BLOCK_DATA_SIZE);
+    var uniformIndices = gl.getUniformIndices(program, ["UBORed", "UBOGreen", "UBOBlue"]);
+    var uniformOffsets = gl.getActiveUniforms(program, uniformIndices, gl.UNIFORM_OFFSET);
+
+    if (uniformOffsets.length < 3) {
+        testFailed("Could not query uniform offsets");
+        return;
+    }
+
+    var uboArray = new ArrayBuffer(blockSize);
+    var uboFloatView = new Float32Array(uboArray);
+    uboFloatView[uniformOffsets[0] / Float32Array.BYTES_PER_ELEMENT] = 1.0; // UBORed
+    uboFloatView[uniformOffsets[1] / Float32Array.BYTES_PER_ELEMENT] = 0.0; // UBOGreen
+    uboFloatView[uniformOffsets[2] / Float32Array.BYTES_PER_ELEMENT] = 0.0; // UBOBlue
+
+    var binding = 1;
+    gl.uniformBlockBinding(program, blockIndex, binding);
+
+    wtu.setupUnitQuad(gl);
+
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "Set up succeeded");
+
+    var buffer = gl.createBuffer();
+    gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
+
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArrays: UniformBlock is not backed by a buffer");
+    gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArraysInstanced: UniformBlock is not backed by a buffer");
+
+    gl.bindBufferBase(gl.UNIFORM_BUFFER, binding, buffer);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArrays: UniformBlock is backed by a buffer with no data store");
+    gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArraysInstanced: UniformBlock is backed by a buffer with no data store");
+
+    var arrayNotLargeEnough = new ArrayBuffer(blockSize - 1);
+    gl.bufferData(gl.UNIFORM_BUFFER, arrayNotLargeEnough, gl.DYNAMIC_DRAW);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArrays: UniformBlock not populated with a large enough buffer");
+    gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArraysInstanced: UniformBlock not populated with a large enough buffer");
+
+    gl.bufferData(gl.UNIFORM_BUFFER, uboFloatView, gl.DYNAMIC_DRAW);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "drawArrays: should be able to draw with sufficient data for UniformBlock");
+    wtu.checkCanvas(gl, [255, 0, 0, 255], "draw call should set canvas to red", 2);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "drawArraysInstanced: should be able to draw with sufficient data for UniformBlock");
+    wtu.checkCanvas(gl, [255, 0, 0, 255], "draw call should set canvas to red", 2);
+
+    gl.bindBufferRange(gl.UNIFORM_BUFFER, binding, buffer, 0, blockSize -1);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArrays: bindBufferRange set size too small for UniformBlock");
+    gl.drawArraysInstanced(gl.TRIANGLES, 0, 6, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawArraysInstanced: bindBufferRange set size too small for UniformBlock");
+}
+
+function runDrawElementsTests() {
+    debug("");
+    debug("Testing drawElements, drawRangeElements and drawElementsInstanced");
+
+    var instanceCount = 4;
+
+    var program = wtu.setupProgram(gl, ['vshader', 'fshader']);
+    if (!program) {
+        testFailed("Could not compile shader with uniform blocks without error");
+        return;
+    }
+
+    var blockIndex = gl.getUniformBlockIndex(program, "UBOData");
+    var blockSize = gl.getActiveUniformBlockParameter(program, blockIndex, gl.UNIFORM_BLOCK_DATA_SIZE);
+    var uniformIndices = gl.getUniformIndices(program, ["UBORed", "UBOGreen", "UBOBlue"]);
+    var uniformOffsets = gl.getActiveUniforms(program, uniformIndices, gl.UNIFORM_OFFSET);
+
+    if (uniformOffsets.length < 3) {
+        testFailed("Could not query uniform offsets");
+        return;
+    }
+
+    var uboArray = new ArrayBuffer(blockSize);
+    var uboFloatView = new Float32Array(uboArray);
+    uboFloatView[uniformOffsets[0] / Float32Array.BYTES_PER_ELEMENT] = 1.0; // UBORed
+    uboFloatView[uniformOffsets[1] / Float32Array.BYTES_PER_ELEMENT] = 0.0; // UBOGreen
+    uboFloatView[uniformOffsets[2] / Float32Array.BYTES_PER_ELEMENT] = 0.0; // UBOBlue
+
+    var binding = 1;
+    gl.uniformBlockBinding(program, blockIndex, binding);
+
+    wtu.setupIndexedQuad(gl, 1, 0);
+
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "Set up succeeded");
+
+    var buffer = gl.createBuffer();
+    gl.bindBuffer(gl.UNIFORM_BUFFER, buffer);
+
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElements: UniformBlock is not backed by a buffer");
+    gl.drawRangeElements(gl.TRIANGLES, 0, 5, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawRangeElements: UniformBlock is not backed by a buffer");
+    gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElementsInstanced: UniformBlock is not backed a buffer");
+
+    gl.bindBufferBase(gl.UNIFORM_BUFFER, binding, buffer);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElements: UniformBlock is populated with a buffer with no data store");
+    gl.drawRangeElements(gl.TRIANGLES, 0, 5, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawRangeElements: UniformBlock is populated with a buffer with no data store");
+    gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElementsInstanced: UniformBlock is populated with a buffer with no data store");
+
+    var arrayNotLargeEnough = new ArrayBuffer(blockSize - 1);
+    gl.bufferData(gl.UNIFORM_BUFFER, arrayNotLargeEnough, gl.DYNAMIC_DRAW);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElements: UniformBlock not populated with a large enough buffer");
+    gl.drawRangeElements(gl.TRIANGLES, 0, 5, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawRangeElements: UniformBlock not populated with a large enough buffer");
+    gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElementsInstanced: UniformBlock not populated with a large enough buffer");
+
+    gl.bufferData(gl.UNIFORM_BUFFER, uboFloatView, gl.DYNAMIC_DRAW);
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "drawElements: should be able to draw with sufficient data for UniformBlock");
+    wtu.checkCanvas(gl, [255, 0, 0, 255], "draw call should set canvas to red", 2);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawRangeElements(gl.TRIANGLES, 0, 5, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "drawRangeElements: should be able to draw with sufficient data for UniformBlock");
+    wtu.checkCanvas(gl, [255, 0, 0, 255], "draw call should set canvas to red", 2);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.NO_ERROR, "drawElementsInstanced: should be able to draw with sufficient data for UniformBlock");
+    wtu.checkCanvas(gl, [255, 0, 0, 255], "draw call should set canvas to red", 2);
+
+    gl.bindBufferRange(gl.UNIFORM_BUFFER, binding, buffer, 0, blockSize -1);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElements: bindBufferRange set size too small for UniformBlock");
+    gl.drawRangeElements(gl.TRIANGLES, 0, 5, 6, gl.UNSIGNED_SHORT, 0);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawRangeElements: bindBufferRange set size too small for UniformBlock");
+    gl.drawElementsInstanced(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0, instanceCount);
+    wtu.glErrorShouldBe(gl, gl.INVALID_OPERATION, "drawElementsInstanced: bindBufferRange set size too small for UniformBlock");
+}
+
+debug("");
+wtu.glErrorShouldBe(gl, gl.NO_ERROR, "there should be no errors");
+
+    var successfullyParsed = true;
+    console.log("✅ WebGL test completed successfully!");
+  } catch (error) {
+    console.error("❌ WebGL test failed:", error);
+    if (typeof debug !== 'undefined') {
+      debug("Test failed: " + error.message);
+    }
+  }
+}
+
+// 环境检测函数
+function isJSARRuntime() {
+  const checks = [
+    () => typeof waitForWebGLTestGlobals !== 'undefined',
+    () => typeof process !== 'undefined' && process.versions && process.versions.node,
+    () => typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('JSAR'),
+    () => typeof global !== 'undefined' && global.process,
+    () => typeof window === 'undefined' && typeof global !== 'undefined',
+    () => typeof module !== 'undefined' && module.exports
+  ];
+  
+  const result = checks.some(check => {
+    try {
+      return check();
+    } catch (e) {
+      return false;
+    }
+  });
+  
+  console.log('🔍 JSAR Runtime detection result:', result);
+  return result;
+}
+
+// 简单轮询等待函数
+function waitForGlobalsSimple(globals, callback, maxAttempts = 300) {
+  let attempts = 0;
+  console.log('🔄 Starting simple polling for globals:', globals);
+  
+  function check() {
+    attempts++;
+    const available = [];
+    const missing = [];
+    
+    globals.forEach(name => {
+      try {
+        if (typeof eval(name) !== 'undefined') {
+          available.push(name);
+        } else {
+          missing.push(name);
+        }
+      } catch (e) {
+        missing.push(name);
+      }
+    });
+    
+    if (missing.length === 0) {
+      console.log('✅ All globals available:', globals);
+      callback();
+    } else if (attempts >= maxAttempts) {
+      console.error('❌ Timeout waiting for globals. Available:', available, 'Missing:', missing);
+    } else {
+      if (attempts % 20 === 0 || attempts <= 5) {
+        console.log(`⏳ Waiting for globals... Available: [${available.join(', ')}], Missing: [${missing.join(', ')}] (${attempts}/${maxAttempts})`);
+      }
+      setTimeout(check, 50);
+    }
+  }
+  
+  check();
+}
+
+// 智能初始化
+function initializeTest() {
+  console.log("🔍 Checking environment and dependencies...");
+  
+  const isJSAR = isJSARRuntime();
+  const hasAsyncLoader = typeof waitForWebGLTestGlobals !== 'undefined';
+  const requiredGlobals = ['description', 'debug', 'WebGLTestUtils'];
+  
+  console.log("Environment info:", {
+    isJSARRuntime: isJSAR,
+    hasAsyncLoader: hasAsyncLoader,
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+  });
+  
+  if (isJSAR || hasAsyncLoader) {
+    console.log("🔄 JSAR Runtime environment detected, using async loader...");
+    
+    if (hasAsyncLoader) {
+      waitForWebGLTestGlobals(runWebGLTest, {
+        maxRetries: 300,
+        retryInterval: 50,
+        timeout: 15000,
+        onTimeout: function() {
+          console.error("❌ Timeout: WebGL test dependencies not available after 15s");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Timeout waiting for dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        },
+        onError: function() {
+          console.error("❌ Error: Failed to load WebGL test dependencies");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Failed to load dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        }
+      });
+    } else {
+      console.log("⏳ No async loader found, using simple polling...");
+      waitForGlobalsSimple(requiredGlobals, runWebGLTest);
+    }
+  } else {
+    console.log("🌐 Browser environment detected, running test directly...");
+    setTimeout(runWebGLTest, 500);
+  }
+}
+
+// 确保DOM加载完成后再初始化
+setTimeout(initializeTest, 500);
+
+</script>
+<!-- <script src="../../js/js-test-post.js"></script> -->
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "basic-scene",
+    "title": "基础场景",
+    "description": "一个基础的ThreeJS XR场景，包含简单的几何体和光照效果",
+    "tags": ["基础", "几何体"],
+    "thumbnailUrl": "./assets/thumbnails/basic-scene.jpg",
+    "scenePath": "./cases/basic-scene.html"
+  },
+  {
+    "id": "interactive-objects",
+    "title": "交互对象",
+    "description": "可以与场景中的对象进行交互，包括拾取、移动和旋转",
+    "tags": ["交互", "控制器"],
+    "thumbnailUrl": "./assets/thumbnails/interactive-objects.jpg",
+    "scenePath": "./cases/interactive-objects.html"
+  },
+  {
+    "id": "physics-simulation",
+    "title": "物理模拟",
+    "description": "在XR环境中的物理模拟，包括重力、碰撞和弹性效果",
+    "tags": ["物理", "碰撞"],
+    "thumbnailUrl": "./assets/thumbnails/physics-simulation.jpg",
+    "scenePath": "./cases/physics-simulation.html"
+  },
+  {
+    "id": "environment-mapping",
+    "title": "环境映射",
+    "description": "使用环境贴图创建逼真的反射和折射效果",
+    "tags": ["环境", "材质"],
+    "thumbnailUrl": "./assets/thumbnails/environment-mapping.jpg",
+    "scenePath": "./cases/environment-mapping.html"
+  },
+  {
+    "id": "particle-effects",
+    "title": "粒子效果",
+    "description": "使用粒子系统创建各种视觉效果，如火焰、烟雾和爆炸",
+    "tags": ["粒子", "特效"],
+    "thumbnailUrl": "./assets/thumbnails/particle-effects.jpg",
+    "scenePath": "./cases/particle-effects.html"
+  },
+  {
+    "id": "audio-visualization",
+    "title": "音频可视化",
+    "description": "根据音频输入动态改变场景中的对象属性",
+    "tags": ["音频", "动画"],
+    "thumbnailUrl": "./assets/thumbnails/audio-visualization.jpg",
+    "scenePath": "./cases/audio-visualization.html"
+  }
+]

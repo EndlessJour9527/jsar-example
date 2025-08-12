@@ -1,0 +1,196 @@
+<!--
+Copyright (c) 2019 The Khronos Group Inc.
+Use of this source code is governed by an MIT-style license that can be
+found in the LICENSE.txt file.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../resources/js-test-style.css"/>
+<script src="../../js/js-test-pre.js"></script>
+<script src="../../js/webgl-test-utils.js"></script>
+<script src="../../js/tests/gl-bindattriblocation-aliasing.js"></script>
+<title>bindAttribLocation with aliasing - inactive attributes</title>
+</head>
+<body>
+<div id="description"></div>
+<div id="console"></div>
+<canvas id="canvas" width="8" height="8" style="width: 8px; height: 8px;"></canvas>
+<script id="vertexShaderStaticallyUsedButInactive" type="text/something-not-javascript">#version 300 es
+precision mediump float;
+in $(type_1) a_1;
+in $(type_2) a_2;
+void main() {
+    gl_Position = true ? $(gl_Position_1) : $(gl_Position_2);
+}
+</script>
+<script id="vertexShaderUnused" type="text/something-not-javascript">#version 300 es
+precision mediump float;
+in $(type_1) a_1;
+in $(type_2) a_2;
+void main() {
+    gl_Position = vec4(0.0);
+}
+</script>
+<!-- Load WebGL async loader -->
+
+<script type="module">  
+"use strict";
+import * as loader from '../../js/webgl-async-loader.js';
+const { waitForWebGLTestGlobals } = loader;
+// 使用异步加载器等待所有WebGL测试依赖加载完成add
+function runWebGLTest() {
+  try {
+    description("This test verifies combinations of valid inactive attributes cannot be bound to the same location with bindAttribLocation. GLSL ES 3.00.6 section 12.46.");
+    var wtu = WebGLTestUtils;
+    var canvas = document.getElementById("canvas");
+    var gl =  navigator.gl || wtu.create3DContext(canvas, {antialias: false}, 2);
+    var glFragmentShader = wtu.loadShader(gl, wtu.simpleColorFragmentShaderESSL300, gl.FRAGMENT_SHADER);
+
+    debug("Testing with shader that has statically used but inactive attributes.");
+    runBindAttribLocationAliasingTest(wtu, gl, glFragmentShader, wtu.getScript('vertexShaderStaticallyUsedButInactive'));
+
+    debug("");
+    debug("Testing with shader that has entirely unused attributes.");
+    runBindAttribLocationAliasingTest(wtu, gl, glFragmentShader, wtu.getScript('vertexShaderUnused'));
+
+    var successfullyParsed = true;
+    console.log("✅ WebGL test completed successfully!");
+  } catch (error) {
+    console.error("❌ WebGL test failed:", error);
+    debug("Test failed: " + error.message);
+  }
+}
+
+// 检测是否在JSAR Runtime环境中
+function isJSARRuntime() {
+  // 多种检测方式
+  const checks = [
+    () => typeof waitForWebGLTestGlobals !== 'undefined',
+    () => typeof process !== 'undefined' && process.versions && process.versions.node,
+    () => typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.includes('JSAR'),
+    () => typeof global !== 'undefined' && global.process,
+    () => typeof window === 'undefined' && typeof global !== 'undefined',
+    () => typeof module !== 'undefined' && module.exports
+  ];
+  
+  const result = checks.some(check => {
+    try {
+      return check();
+    } catch (e) {
+      return false;
+    }
+  });
+  
+  console.log('🔍 JSAR Runtime detection result:', result);
+  return result;
+}
+
+// 简单的轮询等待函数（备用方案）
+function waitForGlobalsSimple(globals, callback, maxAttempts = 300) {
+  let attempts = 0;
+  console.log('🔄 Starting simple polling for globals:', globals);
+  
+  function check() {
+    attempts++;
+    const available = [];
+    const missing = [];
+    
+    globals.forEach(name => {
+      try {
+        if (typeof eval(name) !== 'undefined') {
+          available.push(name);
+        } else {
+          missing.push(name);
+        }
+      } catch (e) {
+        missing.push(name);
+      }
+    });
+    
+    if (missing.length === 0) {
+      console.log('✅ All globals available:', globals);
+      callback();
+    } else if (attempts >= maxAttempts) {
+      console.error('❌ Timeout waiting for globals. Available:', available, 'Missing:', missing);
+    } else {
+      if (attempts % 20 === 0 || attempts <= 5) {
+        console.log(`⏳ Waiting for globals... Available: [${available.join(', ')}], Missing: [${missing.join(', ')}] (${attempts}/${maxAttempts})`);
+      }
+      setTimeout(check, 50);
+    }
+  }
+  
+  check();
+}
+
+// 改进的环境检测和异步加载逻辑
+function initializeTest() {
+  console.log("🔍 Checking environment and dependencies...");
+  
+  const isJSAR = isJSARRuntime();
+  const hasAsyncLoader = typeof waitForWebGLTestGlobals !== 'undefined';
+  const requiredGlobals = ['description', 'debug', 'WebGLTestUtils', 'runBindAttribLocationAliasingTest'];
+  
+  console.log("Environment info:", {
+    isJSARRuntime: isJSAR,
+    hasAsyncLoader: hasAsyncLoader,
+    userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'N/A'
+  });
+  
+  if (isJSAR || hasAsyncLoader) {
+    console.log("🔄 JSAR Runtime environment detected, using async loader...");
+    
+    if (hasAsyncLoader) {
+      // 使用异步加载器等待依赖
+      waitForWebGLTestGlobals(runWebGLTest, {
+        maxRetries: 300,
+        retryInterval: 50,
+        timeout: 15000,
+        onTimeout: function() {
+          console.error("❌ Timeout: WebGL test dependencies not available after 15s");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Timeout waiting for dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        },
+        onError: function() {
+          console.error("❌ Error: Failed to load WebGL test dependencies");
+          try {
+            if (typeof debug !== 'undefined') {
+              debug("Test failed: Failed to load dependencies");
+            }
+          } catch (e) {
+            console.error("Debug function not available:", e);
+          }
+        }
+      });
+    } else {
+      // 如果没有异步加载器，使用简单的轮询等待
+      console.log("⏳ No async loader found, using simple polling...");
+      waitForGlobalsSimple(requiredGlobals, runWebGLTest);
+    }
+  } else {
+    // 在普通浏览器中直接运行
+    console.log("🌐 Browser environment detected, running test directly...");
+    // 添加延迟确保所有脚本都已加载
+    setTimeout(runWebGLTest, 500);
+  }
+}
+
+// 确保DOM加载完成后再初始化
+setTimeout(initializeTest, 500);
+// if (document.readyState === 'loading') {
+//   document.addEventListener('DOMContentLoaded', initializeTest);
+// } else {
+//   // DOM已经加载完成
+//   setTimeout(initializeTest, 100);
+// }
+</script>
+<!-- <script src="../../js/js-test-post.js"></script> -->
+</body>
+</html>

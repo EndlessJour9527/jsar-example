@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>JSAR Async Import Test - Improved</title>
+</head>
+
+<body>
+  <h1>JSAR Async Script Loading Test</h1>
+  <div id="output"></div>
+  </script>
+  <!-- Load the test script -->
+  <script src="./test-import.js"></script>
+
+  <script type="module">
+    import * as loader from './jsar-async-loader.js';
+
+    const { waitForGlobal } = loader;
+
+    function log(message) {
+      console.log(message);
+      const output = document.getElementById('output');
+      if (output) {
+        output.innerHTML += '<p>' + message + '</p>';
+      }
+    }
+
+    log('Starting JSAR async script loading test...');
+
+    // 使用通用的异步等待函数
+    waitForGlobal('testImport', function () {
+      log('✅ testImport function is now available!');
+      log('testImport type: ' + typeof testImport);
+
+      // 调用函数进行测试
+      try {
+        testImport();
+        log('✅ testImport function executed successfully!');
+      } catch (error) {
+        log('❌ Error calling testImport: ' + error.message);
+      }
+    }, {
+      maxRetries: 50,
+      retryInterval: 20,
+      timeout: 3000,
+      onTimeout: function () {
+        log('❌ Timeout: testImport function not available after 3 seconds');
+      },
+      onError: function () {
+        log('❌ Error: Maximum retries reached waiting for testImport');
+      }
+    });
+  </script>
+
+</body>
+
+</html>

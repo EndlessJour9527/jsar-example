@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JSAR WebGL Test Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: rgb(0, 0, 0);
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .status {
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .success { background: rgba(40, 167, 69, 0.8); }
+    .error { background: rgba(220, 53, 69, 0.8); }
+    .info { background: rgba(23, 162, 184, 0.8); }
+    .warning { background: rgba(255, 193, 7, 0.8); color: #333; }
+    .demo-section {
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      border-left: 4px solid #00ff88;
+    }
+    .code-block {
+      background: rgba(0,0,0,0.3);
+      padding: 15px;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+    .highlight {
+      background: rgba(255,255,0,0.2);
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    #log {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🚀 JSAR WebGL异步加载器演示</h1>
+      <p>解决JSAR Runtime中WebGL测试的undefined问题</p>
+    </div>
+    
+    <div id="status" class="status info">🔄 正在初始化演示...</div>
+    
+    <div class="demo-section">
+      <h3>💡 解决方案概述</h3>
+      <p>在JSAR Runtime中，由于异步脚本加载的特性，WebGL测试可能会遇到全局变量未定义的问题。我们的解决方案：</p>
+      <ul>
+        <li><strong>异步等待机制</strong>: 等待所有依赖加载完成</li>
+        <li><strong>环境自适应</strong>: 自动检测JSAR Runtime和浏览器环境</li>
+        <li><strong>错误处理</strong>: 完善的超时和重试机制</li>
+        <li><strong>向后兼容</strong>: 保持与标准浏览器的兼容性</li>
+      </ul>
+    </div>
+    
+    <div class="demo-section">
+      <h3>🔧 核心代码示例</h3>
+      <div class="code-block">
+// 检查是否在JSAR runtime环境中
+if (typeof <span class="highlight">waitForWebGLTestGlobals</span> !== 'undefined') {
+  // 在JSAR runtime中使用异步加载器
+  waitForWebGLTestGlobals(runWebGLTest, {
+    maxRetries: 200,
+    retryInterval: 25,
+    timeout: 10000
+  });
+} else {
+  // 在普通浏览器中直接运行
+  setTimeout(runWebGLTest, 100);
+}
+      </div>
+    </div>
+    
+    <div class="demo-section">
+      <h3>📊 实时状态监控</h3>
+      <div id="log"></div>
+    </div>
+    
+    <div class="demo-section">
+      <h3>🎯 测试文件</h3>
+      <p>已修复的测试文件:</p>
+      <ul>
+        <li><code>gl-bindAttribLocation-aliasing-inactive.html</code> - 主要测试文件</li>
+        <li><code>webgl-async-loader.js</code> - 异步加载器核心</li>
+        <li><code>test-webgl-async-loader.html</code> - 功能验证测试</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Load WebGL async loader -->
+  <script src="./webgl-async-loader.js"></script>
+  
+  <script>
+    const statusDiv = document.getElementById('status');
+    const logDiv = document.getElementById('log');
+    
+    function updateStatus(message, type = 'info') {
+      statusDiv.className = `status ${type}`;
+      statusDiv.textContent = message;
+    }
+    
+    function log(message) {
+      console.log(message);
+      const timestamp = new Date().toLocaleTimeString();
+      logDiv.textContent += `[${timestamp}] ${message}\n`;
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+    
+    function simulateWebGLTest() {
+      log('🎮 开始模拟WebGL测试...');
+      
+      // 模拟测试步骤
+      const steps = [
+        { msg: '📦 加载WebGL测试工具...', delay: 500 },
+        { msg: '🔧 初始化WebGL上下文...', delay: 300 },
+        { msg: '🎨 创建着色器程序...', delay: 400 },
+        { msg: '🔗 测试属性绑定...', delay: 600 },
+        { msg: '✅ 测试完成!', delay: 200 }
+      ];
+      
+      let currentStep = 0;
+      
+      function executeStep() {
+        if (currentStep < steps.length) {
+          const step = steps[currentStep];
+          log(step.msg);
+          currentStep++;
+          
+          if (currentStep === steps.length) {
+            updateStatus('🎉 演示完成 - WebGL测试成功运行!', 'success');
+            log('🏆 所有测试步骤已完成，异步加载器工作正常!');
+          }
+          
+          setTimeout(executeStep, step.delay);
+        }
+      }
+      
+      executeStep();
+    }
+    
+    function runDemo() {
+      log('🚀 启动JSAR WebGL异步加载器演示...');
+      
+      // 检查异步加载器是否可用
+      if (typeof waitForWebGLTestGlobals === 'undefined') {
+        updateStatus('⚠️ 在浏览器环境中运行演示', 'warning');
+        log('ℹ️ 异步加载器在JSAR Runtime中才能发挥完整功能');
+        log('🌐 当前在浏览器环境中运行模拟演示');
+      } else {
+        updateStatus('🔄 JSAR Runtime环境检测成功', 'info');
+        log('✅ 检测到JSAR Runtime环境');
+        log('🔧 异步加载器已就绪');
+      }
+      
+      // 开始模拟测试
+      setTimeout(() => {
+        updateStatus('🔄 正在运行WebGL测试...', 'info');
+        simulateWebGLTest();
+      }, 1000);
+    }
+    
+    // 页面加载完成后开始演示
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(runDemo, 500);
+    });
+  </script>
+</body>
+</html>

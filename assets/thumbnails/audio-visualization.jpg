@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#311b92"/>
+      <stop offset="100%" stop-color="#6a1b9a"/>
+    </linearGradient>
+    
+    <linearGradient id="bar-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#2979ff"/>
+    </linearGradient>
+    
+    <linearGradient id="circle-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4081"/>
+      <stop offset="100%" stop-color="#f50057"/>
+    </linearGradient>
+    
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+    </filter>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="300" height="200" fill="url(#bg)"/>
+  
+  <!-- 音频波形可视化 -->
+  <g transform="translate(0, 100)">
+    <!-- 频谱柱状图 -->
+    <g>
+      <rect x="20" y="-10" width="5" height="10" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="10;40;10" dur="1.1s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-10;-40;-10" dur="1.1s" repeatCount="indefinite"/>
+      </rect>
+      
+      <rect x="30" y="-25" width="5" height="25" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="25;50;25" dur="0.9s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-25;-50;-25" dur="0.9s" repeatCount="indefinite"/>
+      </rect>
+      
+      <rect x="40" y="-15" width="5" height="15" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="15;35;15" dur="1.3s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-15;-35;-15" dur="1.3s" repeatCount="indefinite"/>
+      </rect>
+      
+      <rect x="50" y="-30" width="5" height="30" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="30;60;30" dur="1s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-30;-60;-30" dur="1s" repeatCount="indefinite"/>
+      </rect>
+      
+      <rect x="60" y="-20" width="5" height="20" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="20;45;20" dur="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-20;-45;-20" dur="1.2s" repeatCount="indefinite"/>
+      </rect>
+      
+      <rect x="70" y="-35" width="5" height="35" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="35;55;35" dur="0.8s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-35;-55;-35" dur="0.8s" repeatCount="indefinite"/>
+      </rect>
+      
+      <rect x="80" y="-25" width="5" height="25" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="25;40;25" dur="1.1s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-25;-40;-25" dur="1.1s" repeatCount="indefinite"/>
+      </rect>
+      
+      <rect x="90" y="-15" width="5" height="15" fill="url(#bar-gradient)">
+        <animate attributeName="height" values="15;30;15" dur="1.3s" repeatCount="indefinite"/>
+        <animate attributeName="y" values="-15;-30;-15" dur="1.3s" repeatCount="indefinite"/>
+      </rect>
+    </g>
+    
+    <!-- 波形线 -->
+    <path d="M20,0 Q35,-20 50,0 Q65,20 80,0 Q95,-20 110,0" stroke="#18ffff" stroke-width="2" fill="none">
+      <animate attributeName="d" values="M20,0 Q35,-20 50,0 Q65,20 80,0 Q95,-20 110,0; M20,0 Q35,20 50,0 Q65,-20 80,0 Q95,20 110,0; M20,0 Q35,-20 50,0 Q65,20 80,0 Q95,-20 110,0" dur="2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- 圆形音频可视化 -->
+  <g transform="translate(200, 100)">
+    <!-- 中心圆 -->
+    <circle cx="0" cy="0" r="20" fill="url(#circle-gradient)" filter="url(#glow)">
+      <animate attributeName="r" values="20;25;20" dur="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.8;1" dur="1s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- 脉冲环 -->
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#ff4081" stroke-width="2" opacity="0.7">
+      <animate attributeName="r" values="30;50;30" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="2;1;2" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;0;0.7" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- 频率线 -->
+    <g>
+      <line x1="0" y1="0" x2="0" y2="-40" stroke="#18ffff" stroke-width="2" transform="rotate(0)">
+        <animate attributeName="y2" values="-30;-40;-30" dur="0.7s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-35" stroke="#18ffff" stroke-width="2" transform="rotate(30)">
+        <animate attributeName="y2" values="-25;-35;-25" dur="0.8s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#18ffff" stroke-width="2" transform="rotate(60)">
+        <animate attributeName="y2" values="-35;-45;-35" dur="0.9s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-30" stroke="#18ffff" stroke-width="2" transform="rotate(90)">
+        <animate attributeName="y2" values="-20;-30;-20" dur="1s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-40" stroke="#18ffff" stroke-width="2" transform="rotate(120)">
+        <animate attributeName="y2" values="-30;-40;-30" dur="1.1s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-35" stroke="#18ffff" stroke-width="2" transform="rotate(150)">
+        <animate attributeName="y2" values="-25;-35;-25" dur="1.2s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#18ffff" stroke-width="2" transform="rotate(180)">
+        <animate attributeName="y2" values="-35;-45;-35" dur="0.7s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-30" stroke="#18ffff" stroke-width="2" transform="rotate(210)">
+        <animate attributeName="y2" values="-20;-30;-20" dur="0.8s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-40" stroke="#18ffff" stroke-width="2" transform="rotate(240)">
+        <animate attributeName="y2" values="-30;-40;-30" dur="0.9s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-35" stroke="#18ffff" stroke-width="2" transform="rotate(270)">
+        <animate attributeName="y2" values="-25;-35;-25" dur="1s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-45" stroke="#18ffff" stroke-width="2" transform="rotate(300)">
+        <animate attributeName="y2" values="-35;-45;-35" dur="1.1s" repeatCount="indefinite"/>
+      </line>
+      
+      <line x1="0" y1="0" x2="0" y2="-30" stroke="#18ffff" stroke-width="2" transform="rotate(330)">
+        <animate attributeName="y2" values="-20;-30;-20" dur="1.2s" repeatCount="indefinite"/>
+      </line>
+    </g>
+  </g>
+  
+  <!-- 音符图标 -->
+  <g transform="translate(150, 40)">
+    <path d="M-10,0 L-10,-20 L0,-20 L0,0 Z" fill="#ffffff" opacity="0.8"/>
+    <circle cx="-15" cy="0" r="5" fill="#ffffff" opacity="0.8"/>
+    
+    <path d="M10,5 L10,-15 L20,-15 L20,5 Z" fill="#ffffff" opacity="0.8"/>
+    <circle cx="5" cy="5" r="5" fill="#ffffff" opacity="0.8"/>
+  </g>
+  
+  <text x="150" y="180" font-family="Arial" font-size="14" text-anchor="middle" fill="white">音频可视化</text>
+</svg>
