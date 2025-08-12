@@ -1,0 +1,61 @@
+<html>
+
+<head>
+  <style>
+    html,
+    body {
+      background-color: blanchedalmond;
+      margin: 0;
+      /* overflow: hidden; */
+    }
+
+    .photo-container {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    .stereo-image{
+      height: 100vh;
+    }
+
+    .btn-container {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transform: translateY(-50%);
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .nav-button {
+      pointer-events: auto;
+      padding: 10px;
+      background: rgba(255, 255, 255, 1);
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="photo-container">
+    <img class="stereo-image" src="./assets/DSCF0157.jpg" spatial="stereo" />
+  </div>
+  <div class="btn-container">
+    <button class="nav-button prev-button" id="prev-btn">
+      <img src="./assets/right.png" alt="Previous" />
+    </button>
+    <button class="nav-button next-button" id="next-btn">
+      <img src="./assets/right.png" alt="Next" />
+    </button>
+  </div>
+</body>
+
+</html>
